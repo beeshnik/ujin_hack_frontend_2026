@@ -1,8 +1,8 @@
-import { lazy, Suspense } from 'react'
-import { createBrowserRouter, Navigate } from 'react-router-dom'
-import { ROUTES } from '@/shared/config/route-paths'
-import { RequireAuth } from './guards/require-auth'
-import { RequirePermission } from './guards/require-permission'
+
+import { createBrowserRouter } from 'react-router-dom'
+// import { ROUTES } from '@/shared/config/route-paths'
+// import { RequireAuth } from './guards/require-auth'
+// import { RequirePermission } from './guards/require-permission'
 // import { AppShell } from '@/widgets/app-shell/ui/app-shell'
 
 // const LoginPage = lazy(() => import('@/pages/auth/login'))
@@ -16,19 +16,19 @@ import { RequirePermission } from './guards/require-permission'
 // const AccessDeniedPage = lazy(() => import('@/pages/access-denied'))
 // const NotFoundPage = lazy(() => import('@/pages/not-found'))
 
-const PageLoader = () => (
-  <div className="flex min-h-[200px] items-center justify-center">
-    <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-  </div>
-)
+// const PageLoader = () => (
+//   <div className="flex min-h-[200px] items-center justify-center">
+//     <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+//   </div>
+// )
 
-function S(Component: React.ComponentType) {
-  return (
-    <Suspense fallback={<PageLoader />}>
-      <Component />
-    </Suspense>
-  )
-}
+// function S(Component: React.ComponentType) {
+//   return (
+//     <Suspense fallback={<PageLoader />}>
+//       <Component />
+//     </Suspense>
+//   )
+// }
 
 export const router = createBrowserRouter(
   [
