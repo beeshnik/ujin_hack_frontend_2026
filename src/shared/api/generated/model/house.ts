@@ -19,4 +19,5 @@ export interface House {
   address: string;
   floors_number: number;
   entrances_number: number;
+  city: string;
 }

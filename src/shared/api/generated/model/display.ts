@@ -15,8 +15,9 @@
 
 export interface Display {
   id: number;
+  token: string;
   name: string;
-  template_id: number;
+  template_id?: number;
   house_id: number;
   /** @nullable */
   floor?: number | null;

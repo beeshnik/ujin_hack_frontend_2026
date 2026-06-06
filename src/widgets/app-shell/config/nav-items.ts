@@ -32,12 +32,6 @@ export const NAV_ITEMS: NavItem[] = [
     permission: 'users:view',
   },
   {
-    title: 'Здания',
-    href: ROUTES.HOUSES,
-    icon: BarChart3,
-    permission: 'analytics:view',
-  },
-  {
     title: 'Группы',
     href: ROUTES.GROUPS,
     icon: FileText,

@@ -69,20 +69,22 @@ export type getDisplaysResponseError = (getDisplaysResponse401 | getDisplaysResp
 
 export type getDisplaysResponse = (getDisplaysResponseSuccess | getDisplaysResponseError)
 
-export const getGetDisplaysUrl = (id: number,) => {
+export const getGetDisplaysUrl = (complexId: number,
+    id: number,) => {
 
 
 
 
-  return `/houses/${id}/displays`
+  return `/complexes/${complexId}/houses/${id}/displays`
 }
 
 /**
  * @summary Получить список дисплеев дома
  */
-export const getDisplays = async (id: number, options?: RequestInit): Promise<getDisplaysResponse> => {
+export const getDisplays = async (complexId: number,
+    id: number, options?: RequestInit): Promise<getDisplaysResponse> => {
 
-  return axiosInstance<getDisplaysResponse>(getGetDisplaysUrl(id),
+  return axiosInstance<getDisplaysResponse>(getGetDisplaysUrl(complexId,id),
   {
     ...options,
     method: 'GET'
@@ -95,29 +97,31 @@ export const getDisplays = async (id: number, options?: RequestInit): Promise<ge
 
 
 
-export const getGetDisplaysQueryKey = (id: number,) => {
+export const getGetDisplaysQueryKey = (complexId: number,
+    id: number,) => {
     return [
-    `/houses/${id}/displays`
+    `/complexes/${complexId}/houses/${id}/displays`
     ] as const;
     }
 
 
-export const getGetDisplaysQueryOptions = <TData = Awaited<ReturnType<typeof getDisplays>>, TError = UnauthorizedResponse | NotFoundResponse>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplays>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+export const getGetDisplaysQueryOptions = <TData = Awaited<ReturnType<typeof getDisplays>>, TError = UnauthorizedResponse | NotFoundResponse>(complexId: number,
+    id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplays>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDisplaysQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getGetDisplaysQueryKey(complexId,id);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDisplays>>> = ({ signal }) => getDisplays(id, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDisplays>>> = ({ signal }) => getDisplays(complexId,id, { signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDisplays>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: complexId !== null && complexId !== undefined && id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDisplays>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDisplaysQueryResult = NonNullable<Awaited<ReturnType<typeof getDisplays>>>
@@ -125,7 +129,8 @@ export type GetDisplaysQueryError = UnauthorizedResponse | NotFoundResponse
 
 
 export function useGetDisplays<TData = Awaited<ReturnType<typeof getDisplays>>, TError = UnauthorizedResponse | NotFoundResponse>(
- id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplays>>, TError, TData>> & Pick<
+ complexId: number,
+    id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplays>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getDisplays>>,
           TError,
@@ -135,7 +140,8 @@ export function useGetDisplays<TData = Awaited<ReturnType<typeof getDisplays>>, 
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetDisplays<TData = Awaited<ReturnType<typeof getDisplays>>, TError = UnauthorizedResponse | NotFoundResponse>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplays>>, TError, TData>> & Pick<
+ complexId: number,
+    id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplays>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getDisplays>>,
           TError,
@@ -145,7 +151,8 @@ export function useGetDisplays<TData = Awaited<ReturnType<typeof getDisplays>>, 
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetDisplays<TData = Awaited<ReturnType<typeof getDisplays>>, TError = UnauthorizedResponse | NotFoundResponse>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplays>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+ complexId: number,
+    id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplays>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -153,11 +160,12 @@ export function useGetDisplays<TData = Awaited<ReturnType<typeof getDisplays>>, 
  */
 
 export function useGetDisplays<TData = Awaited<ReturnType<typeof getDisplays>>, TError = UnauthorizedResponse | NotFoundResponse>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplays>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+ complexId: number,
+    id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplays>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetDisplaysQueryOptions(id,options)
+  const queryOptions = getGetDisplaysQueryOptions(complexId,id,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -193,21 +201,23 @@ export type createDisplayResponseError = (createDisplayResponse401 | createDispl
 
 export type createDisplayResponse = (createDisplayResponseSuccess | createDisplayResponseError)
 
-export const getCreateDisplayUrl = (id: number,) => {
+export const getCreateDisplayUrl = (complexId: number,
+    id: number,) => {
 
 
 
 
-  return `/houses/${id}/displays`
+  return `/complexes/${complexId}/houses/${id}/displays`
 }
 
 /**
  * @summary Создать дисплей
  */
-export const createDisplay = async (id: number,
+export const createDisplay = async (complexId: number,
+    id: number,
     displayInput: DisplayInput, options?: RequestInit): Promise<createDisplayResponse> => {
 
-  return axiosInstance<createDisplayResponse>(getCreateDisplayUrl(id),
+  return axiosInstance<createDisplayResponse>(getCreateDisplayUrl(complexId,id),
   {
     ...options,
     method: 'POST',
@@ -220,8 +230,8 @@ export const createDisplay = async (id: number,
 
 
 export const getCreateDisplayMutationOptions = <TError = UnauthorizedResponse | NotFoundResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDisplay>>, TError,{id: number;data: DisplayInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createDisplay>>, TError,{id: number;data: DisplayInput}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDisplay>>, TError,{complexId: number;id: number;data: DisplayInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createDisplay>>, TError,{complexId: number;id: number;data: DisplayInput}, TContext> => {
 
 const mutationKey = ['createDisplay'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -233,10 +243,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDisplay>>, {id: number;data: DisplayInput}> = (props) => {
-          const {id,data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDisplay>>, {complexId: number;id: number;data: DisplayInput}> = (props) => {
+          const {complexId,id,data} = props ?? {};
 
-          return  createDisplay(id,data,requestOptions)
+          return  createDisplay(complexId,id,data,requestOptions)
         }
 
 
@@ -254,11 +264,11 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  * @summary Создать дисплей
  */
 export const useCreateDisplay = <TError = UnauthorizedResponse | NotFoundResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDisplay>>, TError,{id: number;data: DisplayInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDisplay>>, TError,{complexId: number;id: number;data: DisplayInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createDisplay>>,
         TError,
-        {id: number;data: DisplayInput},
+        {complexId: number;id: number;data: DisplayInput},
         TContext
       > => {
       return useMutation(getCreateDisplayMutationOptions(options), queryClient);
@@ -287,22 +297,24 @@ export type getDisplayByIdResponseError = (getDisplayByIdResponse401 | getDispla
 
 export type getDisplayByIdResponse = (getDisplayByIdResponseSuccess | getDisplayByIdResponseError)
 
-export const getGetDisplayByIdUrl = (id: number,
+export const getGetDisplayByIdUrl = (complexId: number,
+    id: number,
     displayId: number,) => {
 
 
 
 
-  return `/houses/${id}/displays/${displayId}`
+  return `/complexes/${complexId}/houses/${id}/displays/${displayId}`
 }
 
 /**
  * @summary Получить дисплей по ID
  */
-export const getDisplayById = async (id: number,
+export const getDisplayById = async (complexId: number,
+    id: number,
     displayId: number, options?: RequestInit): Promise<getDisplayByIdResponse> => {
 
-  return axiosInstance<getDisplayByIdResponse>(getGetDisplayByIdUrl(id,displayId),
+  return axiosInstance<getDisplayByIdResponse>(getGetDisplayByIdUrl(complexId,id,displayId),
   {
     ...options,
     method: 'GET'
@@ -315,31 +327,33 @@ export const getDisplayById = async (id: number,
 
 
 
-export const getGetDisplayByIdQueryKey = (id: number,
+export const getGetDisplayByIdQueryKey = (complexId: number,
+    id: number,
     displayId: number,) => {
     return [
-    `/houses/${id}/displays/${displayId}`
+    `/complexes/${complexId}/houses/${id}/displays/${displayId}`
     ] as const;
     }
 
 
-export const getGetDisplayByIdQueryOptions = <TData = Awaited<ReturnType<typeof getDisplayById>>, TError = UnauthorizedResponse | NotFoundResponse>(id: number,
+export const getGetDisplayByIdQueryOptions = <TData = Awaited<ReturnType<typeof getDisplayById>>, TError = UnauthorizedResponse | NotFoundResponse>(complexId: number,
+    id: number,
     displayId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplayById>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDisplayByIdQueryKey(id,displayId);
+  const queryKey =  queryOptions?.queryKey ?? getGetDisplayByIdQueryKey(complexId,id,displayId);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDisplayById>>> = ({ signal }) => getDisplayById(id,displayId, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDisplayById>>> = ({ signal }) => getDisplayById(complexId,id,displayId, { signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, enabled: id !== null && id !== undefined && displayId !== null && displayId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDisplayById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: complexId !== null && complexId !== undefined && id !== null && id !== undefined && displayId !== null && displayId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDisplayById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDisplayByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDisplayById>>>
@@ -347,7 +361,8 @@ export type GetDisplayByIdQueryError = UnauthorizedResponse | NotFoundResponse
 
 
 export function useGetDisplayById<TData = Awaited<ReturnType<typeof getDisplayById>>, TError = UnauthorizedResponse | NotFoundResponse>(
- id: number,
+ complexId: number,
+    id: number,
     displayId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplayById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getDisplayById>>,
@@ -358,7 +373,8 @@ export function useGetDisplayById<TData = Awaited<ReturnType<typeof getDisplayBy
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetDisplayById<TData = Awaited<ReturnType<typeof getDisplayById>>, TError = UnauthorizedResponse | NotFoundResponse>(
- id: number,
+ complexId: number,
+    id: number,
     displayId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplayById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getDisplayById>>,
@@ -369,7 +385,8 @@ export function useGetDisplayById<TData = Awaited<ReturnType<typeof getDisplayBy
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetDisplayById<TData = Awaited<ReturnType<typeof getDisplayById>>, TError = UnauthorizedResponse | NotFoundResponse>(
- id: number,
+ complexId: number,
+    id: number,
     displayId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplayById>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -378,12 +395,13 @@ export function useGetDisplayById<TData = Awaited<ReturnType<typeof getDisplayBy
  */
 
 export function useGetDisplayById<TData = Awaited<ReturnType<typeof getDisplayById>>, TError = UnauthorizedResponse | NotFoundResponse>(
- id: number,
+ complexId: number,
+    id: number,
     displayId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDisplayById>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetDisplayByIdQueryOptions(id,displayId,options)
+  const queryOptions = getGetDisplayByIdQueryOptions(complexId,id,displayId,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -419,23 +437,25 @@ export type updateDisplayResponseError = (updateDisplayResponse401 | updateDispl
 
 export type updateDisplayResponse = (updateDisplayResponseSuccess | updateDisplayResponseError)
 
-export const getUpdateDisplayUrl = (id: number,
+export const getUpdateDisplayUrl = (complexId: number,
+    id: number,
     displayId: number,) => {
 
 
 
 
-  return `/houses/${id}/displays/${displayId}`
+  return `/complexes/${complexId}/houses/${id}/displays/${displayId}`
 }
 
 /**
  * @summary Обновить дисплей
  */
-export const updateDisplay = async (id: number,
+export const updateDisplay = async (complexId: number,
+    id: number,
     displayId: number,
     displayInput: DisplayInput, options?: RequestInit): Promise<updateDisplayResponse> => {
 
-  return axiosInstance<updateDisplayResponse>(getUpdateDisplayUrl(id,displayId),
+  return axiosInstance<updateDisplayResponse>(getUpdateDisplayUrl(complexId,id,displayId),
   {
     ...options,
     method: 'PUT',
@@ -448,8 +468,8 @@ export const updateDisplay = async (id: number,
 
 
 export const getUpdateDisplayMutationOptions = <TError = UnauthorizedResponse | NotFoundResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDisplay>>, TError,{id: number;displayId: number;data: DisplayInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateDisplay>>, TError,{id: number;displayId: number;data: DisplayInput}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDisplay>>, TError,{complexId: number;id: number;displayId: number;data: DisplayInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateDisplay>>, TError,{complexId: number;id: number;displayId: number;data: DisplayInput}, TContext> => {
 
 const mutationKey = ['updateDisplay'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -461,10 +481,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDisplay>>, {id: number;displayId: number;data: DisplayInput}> = (props) => {
-          const {id,displayId,data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDisplay>>, {complexId: number;id: number;displayId: number;data: DisplayInput}> = (props) => {
+          const {complexId,id,displayId,data} = props ?? {};
 
-          return  updateDisplay(id,displayId,data,requestOptions)
+          return  updateDisplay(complexId,id,displayId,data,requestOptions)
         }
 
 
@@ -482,11 +502,11 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  * @summary Обновить дисплей
  */
 export const useUpdateDisplay = <TError = UnauthorizedResponse | NotFoundResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDisplay>>, TError,{id: number;displayId: number;data: DisplayInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDisplay>>, TError,{complexId: number;id: number;displayId: number;data: DisplayInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateDisplay>>,
         TError,
-        {id: number;displayId: number;data: DisplayInput},
+        {complexId: number;id: number;displayId: number;data: DisplayInput},
         TContext
       > => {
       return useMutation(getUpdateDisplayMutationOptions(options), queryClient);
@@ -515,22 +535,24 @@ export type deleteDisplayResponseError = (deleteDisplayResponse401 | deleteDispl
 
 export type deleteDisplayResponse = (deleteDisplayResponseSuccess | deleteDisplayResponseError)
 
-export const getDeleteDisplayUrl = (id: number,
+export const getDeleteDisplayUrl = (complexId: number,
+    id: number,
     displayId: number,) => {
 
 
 
 
-  return `/houses/${id}/displays/${displayId}`
+  return `/complexes/${complexId}/houses/${id}/displays/${displayId}`
 }
 
 /**
  * @summary Удалить дисплей
  */
-export const deleteDisplay = async (id: number,
+export const deleteDisplay = async (complexId: number,
+    id: number,
     displayId: number, options?: RequestInit): Promise<deleteDisplayResponse> => {
 
-  return axiosInstance<deleteDisplayResponse>(getDeleteDisplayUrl(id,displayId),
+  return axiosInstance<deleteDisplayResponse>(getDeleteDisplayUrl(complexId,id,displayId),
   {
     ...options,
     method: 'DELETE'
@@ -543,8 +565,8 @@ export const deleteDisplay = async (id: number,
 
 
 export const getDeleteDisplayMutationOptions = <TError = UnauthorizedResponse | NotFoundResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDisplay>>, TError,{id: number;displayId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteDisplay>>, TError,{id: number;displayId: number}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDisplay>>, TError,{complexId: number;id: number;displayId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteDisplay>>, TError,{complexId: number;id: number;displayId: number}, TContext> => {
 
 const mutationKey = ['deleteDisplay'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -556,10 +578,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteDisplay>>, {id: number;displayId: number}> = (props) => {
-          const {id,displayId} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteDisplay>>, {complexId: number;id: number;displayId: number}> = (props) => {
+          const {complexId,id,displayId} = props ?? {};
 
-          return  deleteDisplay(id,displayId,requestOptions)
+          return  deleteDisplay(complexId,id,displayId,requestOptions)
         }
 
 
@@ -577,11 +599,11 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  * @summary Удалить дисплей
  */
 export const useDeleteDisplay = <TError = UnauthorizedResponse | NotFoundResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDisplay>>, TError,{id: number;displayId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDisplay>>, TError,{complexId: number;id: number;displayId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteDisplay>>,
         TError,
-        {id: number;displayId: number},
+        {complexId: number;id: number;displayId: number},
         TContext
       > => {
       return useMutation(getDeleteDisplayMutationOptions(options), queryClient);

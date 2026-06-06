@@ -29,7 +29,7 @@ import type {
 } from '../model';
 
 
-export const getGetComplexesResponseMock = (): Complex[] => (Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), houses: Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), address: faker.string.alpha({length: {min: 10, max: 20}}), floors_number: faker.number.int(), entrances_number: faker.number.int()}))})))
+export const getGetComplexesResponseMock = (): Complex[] => (Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), houses: Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), address: faker.string.alpha({length: {min: 10, max: 20}}), floors_number: faker.number.int(), entrances_number: faker.number.int(), city: faker.string.alpha({length: {min: 10, max: 20}})}))})))
 
 
 export const getGetComplexesMockHandler = (overrideResponse?: Complex[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Complex[]> | Complex[]), options?: RequestHandlerOptions) => {
