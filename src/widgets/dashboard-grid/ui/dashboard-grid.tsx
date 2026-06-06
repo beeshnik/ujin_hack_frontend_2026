@@ -1,6 +1,5 @@
 import { useState } from "react"
 import ReactGridLayout, { useContainerWidth } from "react-grid-layout"
-import { noCompactor } from "react-grid-layout/core"
 import type { Layout } from "react-grid-layout"
 
 import "react-grid-layout/css/styles.css"
@@ -10,6 +9,13 @@ import "./dashboard-grid.css"
 type GridColumns = 3 | 4 | 6
 
 const initialLayout: Layout = []
+
+const compactorMy = {
+  type: null,
+  allowOverlap: false,
+  preventCollision: true,
+  compact: (nextLayout: Layout) => nextLayout,
+}
 
 export function DashboardGrid() {
   const [columns, setColumns] = useState<GridColumns>(3)
@@ -99,10 +105,10 @@ export function DashboardGrid() {
             layout={layout}
             width={width}
             autoSize={false}
-            compactor={noCompactor}
+            compactor={compactorMy}
             gridConfig={{
               cols: columns,
-              rowHeight: (width * 9) / 16 / 16,
+              rowHeight: (width * 16) / 9 / 16,
               margin: [0, 0],
               containerPadding: [0, 0],
               maxRows: 16,
