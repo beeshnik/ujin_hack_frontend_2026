@@ -50,7 +50,7 @@ export function RegistrationForm() {
   };
 
   useEffect(() => {
-    if (registerResponse?.status === 201) {
+    if (registerResponse?.status === 201 || registerResponse?.status === 200) {
       navigate(from, { replace: true });
     } else if (registerResponse?.status === 409) {
       errors.password &&
@@ -84,11 +84,10 @@ export function RegistrationForm() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">Логин</Label>
           <Input
             id="email"
-            type="email"
-            placeholder="admin@example.com"
+            placeholder="Логин"
             autoComplete="email"
             disabled={isPending}
             {...register("login")}

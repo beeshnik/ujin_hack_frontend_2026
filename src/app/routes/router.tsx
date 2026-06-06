@@ -62,59 +62,31 @@ export const router = createBrowserRouter([
     children: [
       {
         path: ROUTES.DASHBOARD,
-        element: (
-          <RequirePermission permission="dashboard:view">
-            {DashboardPage}
-          </RequirePermission>
-        ),
+        element: <Dashboard />,
       },
       {
         path: ROUTES.COMPLEXES,
-        element: (
-          <RequirePermission permission="users:view">
-            {ComplexesPage}
-          </RequirePermission>
-        ),
+        element: <Complexes />,
       },
       {
         path: ROUTES.GROUPS,
-        element: (
-          <RequirePermission permission="analytics:view">
-            {GroupsPage}
-          </RequirePermission>
-        ),
+        element: <Groups />,
       },
       {
         path: ROUTES.DISPLAYS,
-        element: (
-          <RequirePermission permission="users:view">
-            {DisplaysPage}
-          </RequirePermission>
-        ),
+        element: <Displays />,
       },
       {
         path: ROUTES.ALERTS,
-        element: (
-          <RequirePermission permission="users:view">
-            {AlertsPage}
-          </RequirePermission>
-        ),
+        element: <Alerts />,
       },
       {
         path: ROUTES.TEMPLATES,
-        element: (
-          <RequirePermission permission="ui-kit:view">
-            {TemplatesPage}
-          </RequirePermission>
-        ),
+        element: <Templates />,
       },
       {
         path: ROUTES.HOUSES,
-        element: (
-          <RequirePermission permission="settings:view">
-            {HousesPage}
-          </RequirePermission>
-        ),
+        element: <Houses />,
       },
     ],
   },

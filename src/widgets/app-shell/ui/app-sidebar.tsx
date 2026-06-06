@@ -8,11 +8,13 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ onNavigate }: AppSidebarProps) {
-  const hasPermission = useSessionStore((s) => s.hasPermission)
+  // const hasPermission = useSessionStore((s) => s.hasPermission)
 
-  const visibleItems = NAV_ITEMS.filter(
-    (item) => !item.permission || hasPermission(item.permission),
-  )
+  // const visibleItems = NAV_ITEMS.filter(
+  //   (item) => !item.permission || hasPermission(item.permission),
+  // )
+
+  const visibleItems = NAV_ITEMS
 
   return (
     <nav className="flex flex-col gap-1 p-2">

@@ -11,7 +11,7 @@ import type { Session } from "@/entities/session/model/types";
 import { ROUTES } from "@/shared/config/route-paths";
 import { loginSchema, type LoginFormValues } from "../model/schema";
 import { useLogin } from "@/shared/api/generated/auth/auth";
-import { useGetMe } from "@/shared/api/generated/users/users";
+
 
 export function LoginForm() {
   const navigate = useNavigate();
@@ -21,7 +21,6 @@ export function LoginForm() {
   const {
     mutate: login,
     data: loginResponse,
-    isError,
     isPending,
     error,
   } = useLogin();
@@ -33,7 +32,6 @@ export function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { login: "", password: "" },
@@ -74,7 +72,7 @@ export function LoginForm() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">Login</Label>
           <Input
             id="email"
             placeholder="login"
