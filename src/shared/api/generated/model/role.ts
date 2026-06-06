@@ -13,8 +13,15 @@
  * OpenAPI spec version: 2.0.0
  */
 
-export interface RegisterRequest {
-  name: string;
-  login: string;
-  password: string;
-}
+/**
+ * Роль пользователя:
+ * - `USER` — обычный пользователь
+ * - `ADMIN` — администратор
+ */
+export type Role = typeof Role[keyof typeof Role];
+
+
+export const Role = {
+  USER: 'USER',
+  ADMIN: 'ADMIN',
+} as const;

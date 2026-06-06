@@ -12,13 +12,15 @@
  *
  * OpenAPI spec version: 2.0.0
  */
-import { useMutation } from "@tanstack/react-query";
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
   UseMutationOptions,
-  UseMutationResult,
-} from "@tanstack/react-query";
+  UseMutationResult
+} from '@tanstack/react-query';
 
 import type {
   Error,
@@ -26,319 +28,275 @@ import type {
   RefreshRequest,
   RegisterRequest,
   TokenResponse,
-  UnauthorizedResponse,
-} from "../model";
+  UnauthorizedResponse
+} from '../model';
 
-import { axiosInstance } from "../../axios-instance";
+import { axiosInstance } from '../../axios-instance';
+
+
+
 
 export type loginResponse200 = {
-  data: TokenResponse;
-  status: 200;
-};
+  data: TokenResponse
+  status: 200
+}
 
 export type loginResponse401 = {
-  data: UnauthorizedResponse;
-  status: 401;
-};
+  data: UnauthorizedResponse
+  status: 401
+}
 
-export type loginResponseSuccess = loginResponse200 & {
+export type loginResponseSuccess = (loginResponse200) & {
   headers: Headers;
 };
-export type loginResponseError = loginResponse401 & {
+export type loginResponseError = (loginResponse401) & {
   headers: Headers;
 };
 
-export type loginResponse = loginResponseSuccess | loginResponseError;
+export type loginResponse = (loginResponseSuccess | loginResponseError)
 
 export const getLoginUrl = () => {
-  return `/auth/login`;
-};
+
+
+
+
+  return `/auth/login`
+}
 
 /**
  * @summary Войти в систему
  */
-export const login = async (
-  loginRequest: LoginRequest,
-  options?: RequestInit,
-): Promise<loginResponse> => {
-  return axiosInstance<loginResponse>(getLoginUrl(), {
+export const login = async (loginRequest: LoginRequest, options?: RequestInit): Promise<loginResponse> => {
+
+  return axiosInstance<loginResponse>(getLoginUrl(),
+  {
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(loginRequest),
-  });
-};
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(loginRequest)
+  }
+);}
 
-export const getLoginMutationOptions = <
-  TError = UnauthorizedResponse,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof login>>,
-    TError,
-    { data: LoginRequest },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof login>>,
-  TError,
-  { data: LoginRequest },
-  TContext
-> => {
-  const mutationKey = ["login"];
-  const { mutation: mutationOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey } };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof login>>,
-    { data: LoginRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return login(data);
-  };
 
-  return { mutationFn, ...mutationOptions };
-};
+export const getLoginMutationOptions = <TError = UnauthorizedResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginRequest}, TContext> => {
 
-export type LoginMutationResult = NonNullable<
-  Awaited<ReturnType<typeof login>>
->;
-export type LoginMutationBody = LoginRequest;
-export type LoginMutationError = UnauthorizedResponse;
+const mutationKey = ['login'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
 
-/**
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof login>>, {data: LoginRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  login(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type LoginMutationResult = NonNullable<Awaited<ReturnType<typeof login>>>
+    export type LoginMutationBody = LoginRequest
+    export type LoginMutationError = UnauthorizedResponse
+
+    /**
  * @summary Войти в систему
  */
-export const useLogin = <TError = UnauthorizedResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof login>>,
-      TError,
-      { data: LoginRequest },
-      TContext
-    >;
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof login>>,
-  TError,
-  { data: LoginRequest },
-  TContext
-> => {
-  return useMutation(getLoginMutationOptions(options), queryClient);
-};
-export type registerResponse201 = {
-  data: void;
-  status: 201;
-};
+export const useLogin = <TError = UnauthorizedResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginRequest}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof login>>,
+        TError,
+        {data: LoginRequest},
+        TContext
+      > => {
+      return useMutation(getLoginMutationOptions(options), queryClient);
+    }
+    export type registerResponse201 = {
+  data: void
+  status: 201
+}
 
 export type registerResponse409 = {
-  data: Error;
-  status: 409;
-};
+  data: Error
+  status: 409
+}
 
-export type registerResponseSuccess = registerResponse201 & {
+export type registerResponseSuccess = (registerResponse201) & {
   headers: Headers;
 };
-export type registerResponseError = registerResponse409 & {
+export type registerResponseError = (registerResponse409) & {
   headers: Headers;
 };
 
-export type registerResponse = registerResponseSuccess | registerResponseError;
+export type registerResponse = (registerResponseSuccess | registerResponseError)
 
 export const getRegisterUrl = () => {
-  return `/auth/register`;
-};
+
+
+
+
+  return `/auth/register`
+}
 
 /**
  * @summary Зарегистрировать нового пользователя
  */
-export const register = async (
-  registerRequest: RegisterRequest,
-  options?: RequestInit,
-): Promise<registerResponse> => {
-  return axiosInstance<registerResponse>(getRegisterUrl(), {
+export const register = async (registerRequest: RegisterRequest, options?: RequestInit): Promise<registerResponse> => {
+
+  return axiosInstance<registerResponse>(getRegisterUrl(),
+  {
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(registerRequest),
-  });
-};
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(registerRequest)
+  }
+);}
 
-export const getRegisterMutationOptions = <
-  TError = Error,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof register>>,
-    TError,
-    { data: RegisterRequest },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof register>>,
-  TError,
-  { data: RegisterRequest },
-  TContext
-> => {
-  const mutationKey = ["register"];
-  const { mutation: mutationOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey } };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof register>>,
-    { data: RegisterRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return register(data);
-  };
 
-  return { mutationFn, ...mutationOptions };
-};
+export const getRegisterMutationOptions = <TError = Error,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof register>>, TError,{data: RegisterRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof register>>, TError,{data: RegisterRequest}, TContext> => {
 
-export type RegisterMutationResult = NonNullable<
-  Awaited<ReturnType<typeof register>>
->;
-export type RegisterMutationBody = RegisterRequest;
-export type RegisterMutationError = Error;
+const mutationKey = ['register'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
 
-/**
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof register>>, {data: RegisterRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  register(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RegisterMutationResult = NonNullable<Awaited<ReturnType<typeof register>>>
+    export type RegisterMutationBody = RegisterRequest
+    export type RegisterMutationError = Error
+
+    /**
  * @summary Зарегистрировать нового пользователя
  */
-export const useRegister = <TError = Error, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof register>>,
-      TError,
-      { data: RegisterRequest },
-      TContext
-    >;
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof register>>,
-  TError,
-  { data: RegisterRequest },
-  TContext
-> => {
-  return useMutation(getRegisterMutationOptions(options), queryClient);
-};
-export type refreshTokenResponse200 = {
-  data: TokenResponse;
-  status: 200;
-};
+export const useRegister = <TError = Error,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof register>>, TError,{data: RegisterRequest}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof register>>,
+        TError,
+        {data: RegisterRequest},
+        TContext
+      > => {
+      return useMutation(getRegisterMutationOptions(options), queryClient);
+    }
+    export type refreshTokenResponse200 = {
+  data: TokenResponse
+  status: 200
+}
 
 export type refreshTokenResponse401 = {
-  data: UnauthorizedResponse;
-  status: 401;
-};
+  data: UnauthorizedResponse
+  status: 401
+}
 
-export type refreshTokenResponseSuccess = refreshTokenResponse200 & {
+export type refreshTokenResponseSuccess = (refreshTokenResponse200) & {
   headers: Headers;
 };
-export type refreshTokenResponseError = refreshTokenResponse401 & {
+export type refreshTokenResponseError = (refreshTokenResponse401) & {
   headers: Headers;
 };
 
-export type refreshTokenResponse =
-  | refreshTokenResponseSuccess
-  | refreshTokenResponseError;
+export type refreshTokenResponse = (refreshTokenResponseSuccess | refreshTokenResponseError)
 
 export const getRefreshTokenUrl = () => {
-  return `/auth/refresh`;
-};
+
+
+
+
+  return `/auth/refresh`
+}
 
 /**
  * @summary Обновить токены по refresh token
  */
-export const refreshToken = async (
-  refreshRequest: RefreshRequest,
-  options?: RequestInit,
-): Promise<refreshTokenResponse> => {
-  return axiosInstance<refreshTokenResponse>(getRefreshTokenUrl(), {
+export const refreshToken = async (refreshRequest: RefreshRequest, options?: RequestInit): Promise<refreshTokenResponse> => {
+
+  return axiosInstance<refreshTokenResponse>(getRefreshTokenUrl(),
+  {
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(refreshRequest),
-  });
-};
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(refreshRequest)
+  }
+);}
 
-export const getRefreshTokenMutationOptions = <
-  TError = UnauthorizedResponse,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof refreshToken>>,
-    TError,
-    { data: RefreshRequest },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof refreshToken>>,
-  TError,
-  { data: RefreshRequest },
-  TContext
-> => {
-  const mutationKey = ["refreshToken"];
-  const { mutation: mutationOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey } };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof refreshToken>>,
-    { data: RefreshRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return refreshToken(data);
-  };
 
-  return { mutationFn, ...mutationOptions };
-};
+export const getRefreshTokenMutationOptions = <TError = UnauthorizedResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refreshToken>>, TError,{data: RefreshRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof refreshToken>>, TError,{data: RefreshRequest}, TContext> => {
 
-export type RefreshTokenMutationResult = NonNullable<
-  Awaited<ReturnType<typeof refreshToken>>
->;
-export type RefreshTokenMutationBody = RefreshRequest;
-export type RefreshTokenMutationError = UnauthorizedResponse;
+const mutationKey = ['refreshToken'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
 
-/**
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof refreshToken>>, {data: RefreshRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  refreshToken(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RefreshTokenMutationResult = NonNullable<Awaited<ReturnType<typeof refreshToken>>>
+    export type RefreshTokenMutationBody = RefreshRequest
+    export type RefreshTokenMutationError = UnauthorizedResponse
+
+    /**
  * @summary Обновить токены по refresh token
  */
-export const useRefreshToken = <
-  TError = UnauthorizedResponse,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof refreshToken>>,
-      TError,
-      { data: RefreshRequest },
-      TContext
-    >;
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof refreshToken>>,
-  TError,
-  { data: RefreshRequest },
-  TContext
-> => {
-  return useMutation(getRefreshTokenMutationOptions(options), queryClient);
-};
+export const useRefreshToken = <TError = UnauthorizedResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refreshToken>>, TError,{data: RefreshRequest}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof refreshToken>>,
+        TError,
+        {data: RefreshRequest},
+        TContext
+      > => {
+      return useMutation(getRefreshTokenMutationOptions(options), queryClient);
+    }
