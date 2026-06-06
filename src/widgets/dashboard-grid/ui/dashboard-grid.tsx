@@ -179,6 +179,13 @@ export function DashboardGrid() {
     setLayout([])
   }
 
+  const gridJson = {
+    columns,
+    rows: 16,
+    aspectRatio: "9:16",
+    layout,
+  }
+
   return (
     <div className="dashboard-grid-root">
       <div className="dashboard-grid-toolbar">
@@ -248,6 +255,9 @@ export function DashboardGrid() {
           </ReactGridLayout>
         )}
       </div>
+      <pre className="dashboard-grid-json">
+        {JSON.stringify(gridJson, null, 2)}
+      </pre>
     </div>
   )
 }
