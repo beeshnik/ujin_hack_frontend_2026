@@ -1,0 +1,22 @@
+.dashboard-grid {
+    width: 820px;
+    height: 700px;
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    box-sizing: border-box;
+}
+
+.dashboard-grid__item {
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #9ca3af;
+    color: #111827;
+    font-size: 24px;
+    font-weight: 700;
+    user-select: none;
+    cursor: move;
+}
+
+.react-resizable-handle {
+    opacity: 1;
+}
