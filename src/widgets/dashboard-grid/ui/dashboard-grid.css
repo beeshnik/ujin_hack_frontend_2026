@@ -89,3 +89,20 @@
   border-color: #ff5454;
   color: #ff0000;
 }
+
+.dashboard-grid-toolbar {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.dashboard-grid-widget-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dashboard-grid-widget-buttons button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

@@ -8,6 +8,33 @@ import "./dashboard-grid.css"
 
 type GridColumns = 3 | 4 | 6
 
+type WidgetType =
+  | "header"
+  | "footer"
+  | "weather"
+  | "house-news"
+  | "parking"
+  | "storage"
+  | "external-news"
+  | "image"
+  | "text"
+  | "camera"
+  | "promo"
+
+const widgetTypes = [
+  { type: "header", title: "Верхний блок", single: true },
+  { type: "footer", title: "Нижний блок", single: true },
+  { type: "weather", title: "Погода", single: true },
+  { type: "house-news", title: "Новости дома", single: true },
+  { type: "parking", title: "Парковки", single: true },
+  { type: "storage", title: "Кладовые", single: true },
+  { type: "external-news", title: "RSS / внешние новости", single: true },
+  { type: "image", title: "Картинка", single: false },
+  { type: "text", title: "Текст", single: false },
+  { type: "camera", title: "Камера", single: false },
+  { type: "promo", title: "Объявление / промо", single: false },
+] as const
+
 const initialLayout: Layout = []
 
 const compactorMy = {
@@ -20,17 +47,42 @@ const compactorMy = {
 export function DashboardGrid() {
   const [columns, setColumns] = useState<GridColumns>(3)
   const [layout, setLayout] = useState<Layout>(initialLayout)
+
   const { width, containerRef, mounted } = useContainerWidth({
     initialWidth: 800,
   })
 
-  function getNextId() {
-    const letters = "qwertyuiop".split("")
-    const usedIds = new Set(layout.map((item) => item.i))
-    return (
-      letters.find((letter) => !usedIds.has(letter)) ??
-      `item-${layout.length + 1}`
-    )
+  function getWidgetType(id: string): WidgetType {
+    const widget = widgetTypes.find((item) => {
+      return item.type === id || id.startsWith(`${item.type}-`)
+    })
+
+    return widget?.type ?? "text"
+  }
+
+  function getWidgetTitle(id: string) {
+    const type = getWidgetType(id)
+    const widget = widgetTypes.find((item) => item.type === type)
+
+    return widget?.title ?? id
+  }
+
+  function getNextId(type: WidgetType) {
+    const sameTypeCount = layout.filter((item) => {
+      return item.i === type || item.i.startsWith(`${type}-`)
+    }).length
+
+    return sameTypeCount === 0 ? type : `${type}-${sameTypeCount + 1}`
+  }
+
+  function canAddWidget(type: WidgetType) {
+    const widget = widgetTypes.find((item) => item.type === type)
+
+    if (!widget?.single) {
+      return true
+    }
+
+    return !layout.some((item) => item.i === type)
   }
 
   function isCellBusy(x: number, y: number) {
@@ -55,12 +107,55 @@ export function DashboardGrid() {
     return null
   }
 
-  function handleAddObject() {
+  function handleAddObject(type: WidgetType) {
+    if (!canAddWidget(type)) {
+      return
+    }
+
+    const id = getNextId(type)
+
+    if (type === "header") {
+      setLayout([
+        ...layout,
+        {
+          i: id,
+          x: 0,
+          y: 0,
+          w: columns,
+          h: 1,
+          isDraggable: false,
+          isResizable: true,
+          resizeHandles: ["s"],
+        },
+      ])
+
+      return
+    }
+
+    if (type === "footer") {
+      setLayout([
+        ...layout,
+        {
+          i: id,
+          x: 0,
+          y: 15,
+          w: columns,
+          h: 1,
+          isDraggable: false,
+          isResizable: true,
+          resizeHandles: ["n"],
+        },
+      ])
+
+      return
+    }
+
     const cell = findFreeCell()
+
     if (!cell) {
       return
     }
-    const id = getNextId()
+
     setLayout([
       ...layout,
       {
@@ -98,9 +193,18 @@ export function DashboardGrid() {
           <option value={6}>6 колонок</option>
         </select>
 
-        <button type="button" onClick={handleAddObject}>
-          Добавить объект
-        </button>
+        <div className="dashboard-grid-widget-buttons">
+          {widgetTypes.map((widget) => (
+            <button
+              key={widget.type}
+              type="button"
+              disabled={!canAddWidget(widget.type)}
+              onClick={() => handleAddObject(widget.type)}
+            >
+              {widget.title}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div ref={containerRef} className="dashboard-grid">
@@ -122,7 +226,7 @@ export function DashboardGrid() {
             }}
             resizeConfig={{
               enabled: true,
-              handles: ["s", "e", "se"],
+              handles: ["s", "e", "se", "n"],
             }}
             onLayoutChange={(nextLayout) => {
               setLayout(nextLayout)
@@ -138,9 +242,9 @@ export function DashboardGrid() {
                 >
                   ×
                 </button>
-                {item.i.toUpperCase()}
+                {getWidgetTitle(item.i)}
               </div>
-            ))} 
+            ))}
           </ReactGridLayout>
         )}
       </div>
