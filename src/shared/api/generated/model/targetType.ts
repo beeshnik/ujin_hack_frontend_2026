@@ -23,5 +23,5 @@ export type TargetType = typeof TargetType[keyof typeof TargetType];
 
 export const TargetType = {
   DISPLAY: 'DISPLAY',
-  GROUP: 'GROUP',
+  HOUSE: 'HOUSE',
 } as const;
