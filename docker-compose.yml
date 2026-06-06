@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   frontend:
-    image: ghcr.io/${REPO_LC}:latest
-    container_name: quasar-frontend-app
+    image: ghcr.io/ujin_hack_frontend_2026:latest
+    container_name: frontend
     restart: always
     ports:
       - "127.0.0.1:3000:80"

@@ -39,14 +39,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: REPO_LC
           script: |
-            cd /var/www/frontend
-
-            export REPO_LC=$REPO_LC
-            
-            docker compose pull
-            
-            docker compose up -d
-
-            docker image prune -f
+            cd frontend
+            sudo docker compose pull
+            sudo docker compose up -d
