@@ -6,19 +6,25 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
-import { Separator } from "@/shared/ui/separator";
 import { useSessionStore } from "@/entities/session/model/session-store";
 import type { Session } from "@/entities/session/model/types";
 import { ROUTES } from "@/shared/config/route-paths";
 import { loginSchema, type LoginFormValues } from "../model/schema";
 import { useLogin } from "@/shared/api/generated/auth/auth";
+import { useGetMe } from "@/shared/api/generated/users/users";
 
 export function LoginForm() {
   const navigate = useNavigate();
   const location = useLocation();
   const setSession = useSessionStore((s) => s.setSession);
 
-  const { mutate: login, data: loginResponse, isError, isPending, error } = useLogin();
+  const {
+    mutate: login,
+    data: loginResponse,
+    isError,
+    isPending,
+    error,
+  } = useLogin();
 
   const from =
     (location.state as { from?: Location })?.from?.pathname || ROUTES.HOUSES;
@@ -34,34 +40,29 @@ export function LoginForm() {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    login(
-      {
-        data: {
-          login: data.login,
-          password: data.password,
-        },
-      }
-    );
+    login({
+      data: {
+        login: data.login,
+        password: data.password,
+      },
+    });
   };
-
 
   useEffect(() => {
     if (loginResponse?.status === 200) {
-      const loginData = loginResponse.data
+      const loginData = loginResponse.data;
       setSession({
-        user: {
-          role: "admin",
-        },
         accessToken: loginData.accessToken,
         refreshToken: loginData.refreshToken,
         permissions: [],
       } as Session);
       navigate(from, { replace: true });
     } else if (loginResponse?.status === 401) {
-      errors.password && ( errors.password.message =
-        loginResponse?.data.message || "Ошибка в паре логин/пароль")
+      errors.password &&
+        (errors.password.message =
+          loginResponse?.data.message || "Ошибка в паре логин/пароль");
     } else {
-      errors.password && (errors.password.message = "Неизвестная ошибка")
+      errors.password && (errors.password.message = "Неизвестная ошибка");
     }
   }, [loginResponse]);
 
@@ -115,7 +116,12 @@ export function LoginForm() {
         </Button>
       </form>
 
-      <Button className="w-full" onClick={() => {navigate(ROUTES.REGISTRATION);}}>
+      <Button
+        className="w-full"
+        onClick={() => {
+          navigate(ROUTES.REGISTRATION);
+        }}
+      >
         Регистрация
       </Button>
     </div>
