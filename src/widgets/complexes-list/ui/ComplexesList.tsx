@@ -17,7 +17,9 @@ export function ComplexesList() {
     return (
       <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(320px,1fr))] w-full">
         {complexList?.map((complex) => (
-          <ComplexCard complex={complex} key={complex.id}/>
+          <>
+            <ComplexCard complex={complex} key={complex.id} />
+          </>
         ))}
       </div>
     );
