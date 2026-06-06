@@ -16,7 +16,7 @@
 /**
  * Тип цели экстренного сообщения:
  * - `DISPLAY` — отдельный дисплей
- * - `GROUP` — группа дисплеев
+ * - `HOUSE` — весь дом
  */
 export type TargetType = typeof TargetType[keyof typeof TargetType];
 

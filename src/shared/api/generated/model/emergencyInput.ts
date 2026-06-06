@@ -18,5 +18,7 @@ export interface EmergencyInput {
   until_at: string;
   text: string;
   target: number;
+  /** Приоритет алерта (чем выше по числу - тем приоритетнее) */
+  priority: number;
   target_type: TargetType;
 }

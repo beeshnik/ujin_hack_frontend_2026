@@ -32,7 +32,7 @@ import type {
 } from '../model';
 
 
-export const getCreateEmergencyResponseMock = (overrideResponse: Partial<Extract<Emergency, object>> = {}): Emergency => ({id: faker.number.int(), until_at: faker.date.past().toISOString().slice(0, 19) + 'Z', text: faker.string.alpha({length: {min: 10, max: 20}}), target: faker.number.int(), target_type: faker.helpers.arrayElement(Object.values(TargetType)), ...overrideResponse})
+export const getCreateEmergencyResponseMock = (overrideResponse: Partial<Extract<Emergency, object>> = {}): Emergency => ({id: faker.number.int(), until_at: faker.helpers.arrayElement([faker.date.past().toISOString().slice(0, 19) + 'Z', undefined]), text: faker.string.alpha({length: {min: 10, max: 20}}), target: faker.number.int(), priority: faker.number.int(), target_type: faker.helpers.arrayElement(Object.values(TargetType)), ...overrideResponse})
 
 
 export const getCreateEmergencyMockHandler = (overrideResponse?: Emergency | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<Emergency> | Emergency), options?: RequestHandlerOptions) => {

@@ -1,12 +1,12 @@
 import axios from 'axios'
 
 export const axiosInstance = axios.create({
-  baseURL: '/api',
+  baseURL: "/api",
   timeout: 10000,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
-})
+});
 
 axiosInstance.interceptors.request.use((config) => {
   const stored = localStorage.getItem('session-storage')
@@ -36,6 +36,9 @@ axiosInstance.interceptors.response.use(
         500: 'Ошибка сервера',
       }
       const message = (status && messages[status]) || 'Неизвестная ошибка'
+      if (status === 401) {
+        localStorage.removeItem("session-storage");
+      }
       return Promise.reject(new Error(message))
     }
     return Promise.reject(error)

@@ -16,9 +16,11 @@ import type { TargetType } from './targetType';
 
 export interface Emergency {
   id: number;
-  until_at: string;
+  until_at?: string;
   text: string;
   /** ID цели (дисплея или группы в зависимости от target_type) */
   target: number;
+  /** Приоритет алерта (чем выше по числу - тем приоритетнее) */
+  priority: number;
   target_type: TargetType;
 }

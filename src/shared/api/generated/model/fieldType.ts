@@ -15,17 +15,13 @@
 
 /**
  * Тип поля виджета:
- * - `WEATHER` — общее описание погоды
- * - `TEMPERATURE` — температура
- * - `FREE_PARKING_PLACES` — количество свободных парковочных мест
- * - `ALL_PARKING_PLACES` — общее количество парковочных мест
+ * - `STRING` — строковое значение
+ * - `INTEGER` — число
  */
 export type FieldType = typeof FieldType[keyof typeof FieldType];
 
 
 export const FieldType = {
-  WEATHER: 'WEATHER',
-  TEMPERATURE: 'TEMPERATURE',
-  FREE_PARKING_PLACES: 'FREE_PARKING_PLACES',
-  ALL_PARKING_PLACES: 'ALL_PARKING_PLACES',
+  STRING: 'STRING',
+  INTEGER: 'INTEGER',
 } as const;
