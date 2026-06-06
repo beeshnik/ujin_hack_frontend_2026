@@ -35,6 +35,8 @@ import type {
 import { axiosInstance } from '../../axios-instance';
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 export type getComplexesResponse200 = {
@@ -89,16 +91,16 @@ export const getGetComplexesQueryKey = () => {
     }
 
 
-export const getGetComplexesQueryOptions = <TData = Awaited<ReturnType<typeof getComplexes>>, TError = UnauthorizedResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getComplexes>>, TError, TData>>, }
+export const getGetComplexesQueryOptions = <TData = Awaited<ReturnType<typeof getComplexes>>, TError = UnauthorizedResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getComplexes>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetComplexesQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getComplexes>>> = ({ signal }) => getComplexes({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getComplexes>>> = ({ signal }) => getComplexes({ signal, ...requestOptions });
 
 
 
@@ -118,7 +120,7 @@ export function useGetComplexes<TData = Awaited<ReturnType<typeof getComplexes>>
           TError,
           Awaited<ReturnType<typeof getComplexes>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetComplexes<TData = Awaited<ReturnType<typeof getComplexes>>, TError = UnauthorizedResponse>(
@@ -128,11 +130,11 @@ export function useGetComplexes<TData = Awaited<ReturnType<typeof getComplexes>>
           TError,
           Awaited<ReturnType<typeof getComplexes>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetComplexes<TData = Awaited<ReturnType<typeof getComplexes>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getComplexes>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getComplexes>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -140,7 +142,7 @@ export function useGetComplexes<TData = Awaited<ReturnType<typeof getComplexes>>
  */
 
 export function useGetComplexes<TData = Awaited<ReturnType<typeof getComplexes>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getComplexes>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getComplexes>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

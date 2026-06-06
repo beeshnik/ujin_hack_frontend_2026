@@ -35,6 +35,8 @@ import type {
 import { axiosInstance } from '../../axios-instance';
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 export type getHousesResponse200 = {
@@ -89,16 +91,16 @@ export const getGetHousesQueryKey = () => {
     }
 
 
-export const getGetHousesQueryOptions = <TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, }
+export const getGetHousesQueryOptions = <TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetHousesQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHouses>>> = ({ signal }) => getHouses({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHouses>>> = ({ signal }) => getHouses({ signal, ...requestOptions });
 
 
 
@@ -118,7 +120,7 @@ export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TErr
           TError,
           Awaited<ReturnType<typeof getHouses>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>(
@@ -128,11 +130,11 @@ export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TErr
           TError,
           Awaited<ReturnType<typeof getHouses>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -140,7 +142,7 @@ export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TErr
  */
 
 export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
