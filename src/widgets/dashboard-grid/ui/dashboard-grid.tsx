@@ -68,11 +68,17 @@ export function DashboardGrid() {
   }
 
   function getNextId(type: WidgetType) {
+    const widget = widgetTypes.find((item) => item.type === type)
+
+    if (widget?.single) {
+      return type
+    }
+
     const sameTypeCount = layout.filter((item) => {
-      return item.i === type || item.i.startsWith(`${type}-`)
+      return getWidgetType(item.i) === type
     }).length
 
-    return sameTypeCount === 0 ? type : `${type}-${sameTypeCount + 1}`
+    return `${type}-${sameTypeCount + 1}`
   }
 
   function canAddWidget(type: WidgetType) {
@@ -82,7 +88,7 @@ export function DashboardGrid() {
       return true
     }
 
-    return !layout.some((item) => item.i === type)
+    return !layout.some((item) => getWidgetType(item.i) === type)
   }
 
   function isCellBusy(x: number, y: number) {
@@ -181,9 +187,10 @@ export function DashboardGrid() {
 
   const gridJson = {
     columns,
-    rows: 16,
-    aspectRatio: "9:16",
-    layout,
+    layout: layout.map((item) => ({
+      ...item,
+      type: getWidgetType(item.i),
+    })),
   }
 
   return (
