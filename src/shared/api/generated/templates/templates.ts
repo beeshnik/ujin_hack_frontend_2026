@@ -41,6 +41,8 @@ import type {
 import { axiosInstance } from '../../axios-instance';
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 export type getTemplatesResponse200 = {
@@ -95,16 +97,16 @@ export const getGetTemplatesQueryKey = () => {
     }
 
 
-export const getGetTemplatesQueryOptions = <TData = Awaited<ReturnType<typeof getTemplates>>, TError = UnauthorizedResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, }
+export const getGetTemplatesQueryOptions = <TData = Awaited<ReturnType<typeof getTemplates>>, TError = UnauthorizedResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetTemplatesQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplates>>> = ({ signal }) => getTemplates({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplates>>> = ({ signal }) => getTemplates({ signal, ...requestOptions });
 
 
 
@@ -124,7 +126,7 @@ export function useGetTemplates<TData = Awaited<ReturnType<typeof getTemplates>>
           TError,
           Awaited<ReturnType<typeof getTemplates>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetTemplates<TData = Awaited<ReturnType<typeof getTemplates>>, TError = UnauthorizedResponse>(
@@ -134,11 +136,11 @@ export function useGetTemplates<TData = Awaited<ReturnType<typeof getTemplates>>
           TError,
           Awaited<ReturnType<typeof getTemplates>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetTemplates<TData = Awaited<ReturnType<typeof getTemplates>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -146,7 +148,7 @@ export function useGetTemplates<TData = Awaited<ReturnType<typeof getTemplates>>
  */
 
 export function useGetTemplates<TData = Awaited<ReturnType<typeof getTemplates>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -207,15 +209,15 @@ export const createTemplate = async (templateInput: TemplateInput, options?: Req
 
 
 export const getCreateTemplateMutationOptions = <TError = UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTemplate>>, TError,{data: TemplateInput}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTemplate>>, TError,{data: TemplateInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof createTemplate>>, TError,{data: TemplateInput}, TContext> => {
 
 const mutationKey = ['createTemplate'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -223,7 +225,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof createTemplate>>, {data: TemplateInput}> = (props) => {
           const {data} = props ?? {};
 
-          return  createTemplate(data,)
+          return  createTemplate(data,requestOptions)
         }
 
 
@@ -241,7 +243,7 @@ const {mutation: mutationOptions} = options ?
  * @summary Создать шаблон
  */
 export const useCreateTemplate = <TError = UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTemplate>>, TError,{data: TemplateInput}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTemplate>>, TError,{data: TemplateInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createTemplate>>,
         TError,
@@ -307,16 +309,16 @@ export const getGetTemplateByIdQueryKey = (templateId: number,) => {
     }
 
 
-export const getGetTemplateByIdQueryOptions = <TData = Awaited<ReturnType<typeof getTemplateById>>, TError = UnauthorizedResponse | NotFoundResponse>(templateId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplateById>>, TError, TData>>, }
+export const getGetTemplateByIdQueryOptions = <TData = Awaited<ReturnType<typeof getTemplateById>>, TError = UnauthorizedResponse | NotFoundResponse>(templateId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplateById>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetTemplateByIdQueryKey(templateId);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplateById>>> = ({ signal }) => getTemplateById(templateId, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplateById>>> = ({ signal }) => getTemplateById(templateId, { signal, ...requestOptions });
 
 
 
@@ -336,7 +338,7 @@ export function useGetTemplateById<TData = Awaited<ReturnType<typeof getTemplate
           TError,
           Awaited<ReturnType<typeof getTemplateById>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetTemplateById<TData = Awaited<ReturnType<typeof getTemplateById>>, TError = UnauthorizedResponse | NotFoundResponse>(
@@ -346,11 +348,11 @@ export function useGetTemplateById<TData = Awaited<ReturnType<typeof getTemplate
           TError,
           Awaited<ReturnType<typeof getTemplateById>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetTemplateById<TData = Awaited<ReturnType<typeof getTemplateById>>, TError = UnauthorizedResponse | NotFoundResponse>(
- templateId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplateById>>, TError, TData>>, }
+ templateId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplateById>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -358,7 +360,7 @@ export function useGetTemplateById<TData = Awaited<ReturnType<typeof getTemplate
  */
 
 export function useGetTemplateById<TData = Awaited<ReturnType<typeof getTemplateById>>, TError = UnauthorizedResponse | NotFoundResponse>(
- templateId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplateById>>, TError, TData>>, }
+ templateId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplateById>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -425,15 +427,15 @@ export const updateTemplate = async (templateId: number,
 
 
 export const getUpdateTemplateMutationOptions = <TError = UnauthorizedResponse | NotFoundResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTemplate>>, TError,{templateId: number;data: TemplateInput}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTemplate>>, TError,{templateId: number;data: TemplateInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof updateTemplate>>, TError,{templateId: number;data: TemplateInput}, TContext> => {
 
 const mutationKey = ['updateTemplate'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -441,7 +443,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateTemplate>>, {templateId: number;data: TemplateInput}> = (props) => {
           const {templateId,data} = props ?? {};
 
-          return  updateTemplate(templateId,data,)
+          return  updateTemplate(templateId,data,requestOptions)
         }
 
 
@@ -459,7 +461,7 @@ const {mutation: mutationOptions} = options ?
  * @summary Обновить шаблон
  */
 export const useUpdateTemplate = <TError = UnauthorizedResponse | NotFoundResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTemplate>>, TError,{templateId: number;data: TemplateInput}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTemplate>>, TError,{templateId: number;data: TemplateInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateTemplate>>,
         TError,
@@ -518,15 +520,15 @@ export const deleteTemplate = async (templateId: number, options?: RequestInit):
 
 
 export const getDeleteTemplateMutationOptions = <TError = UnauthorizedResponse | NotFoundResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTemplate>>, TError,{templateId: number}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTemplate>>, TError,{templateId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteTemplate>>, TError,{templateId: number}, TContext> => {
 
 const mutationKey = ['deleteTemplate'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -534,7 +536,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteTemplate>>, {templateId: number}> = (props) => {
           const {templateId} = props ?? {};
 
-          return  deleteTemplate(templateId,)
+          return  deleteTemplate(templateId,requestOptions)
         }
 
 
@@ -552,7 +554,7 @@ const {mutation: mutationOptions} = options ?
  * @summary Удалить шаблон
  */
 export const useDeleteTemplate = <TError = UnauthorizedResponse | NotFoundResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTemplate>>, TError,{templateId: number}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTemplate>>, TError,{templateId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteTemplate>>,
         TError,
