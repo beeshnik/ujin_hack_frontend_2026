@@ -1,4 +1,5 @@
-export type UserRole = 'admin' | 'user' 
+import type { User } from "@/shared/api/generated/model"
+
 
 export type Permission =
   | 'dashboard:view'
@@ -20,11 +21,13 @@ export type Permission =
   | 'ui-kit:view'
 
 export interface SessionUser {
-  role: UserRole
+  role: User,
+  name: string,
+  id: string
 }
 
 export interface Session {
-  user: SessionUser
+  user?: User
   accessToken: string,
   refreshToken: string,
   permissions: Permission[]
