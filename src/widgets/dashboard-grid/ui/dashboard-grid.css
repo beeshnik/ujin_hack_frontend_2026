@@ -1,22 +1,58 @@
+.dashboard-grid-root {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dashboard-grid-toolbar {
+  display: flex;
+  gap: 8px;
+}
+
 .dashboard-grid {
-    width: 820px;
-    height: 700px;
-    background: #f3f4f6;
-    border: 1px solid #d1d5db;
-    box-sizing: border-box;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .dashboard-grid__item {
-    box-sizing: border-box;
-    background: #ffffff;
-    border: 1px solid #9ca3af;
-    color: #111827;
-    font-size: 24px;
-    font-weight: 700;
-    user-select: none;
-    cursor: move;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid #9ca3af;
+  color: #111827;
+  font-size: 24px;
+  font-weight: 700;
+  user-select: none;
+  cursor: move;
+}
+
+.react-grid-item.react-resizable {
+  overflow: visible;
 }
 
 .react-resizable-handle {
-    opacity: 1;
+  width: 20px;
+  height: 20px;
+  opacity: 1;
+  z-index: 10;
+}
+
+.react-resizable-handle-s {
+  bottom: 0;
+  cursor: s-resize;
+}
+
+.react-resizable-handle-e {
+  right: 0;
+  cursor: e-resize;
+}
+
+.react-resizable-handle-se {
+  right: 0;
+  bottom: 0;
+  cursor: se-resize;
 }
