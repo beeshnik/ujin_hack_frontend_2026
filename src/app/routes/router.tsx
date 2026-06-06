@@ -5,15 +5,24 @@ import { RequireAuth } from './guards/require-auth'
 import { RequirePermission } from './guards/require-permission'
 import { AppShell } from '@/widgets/app-shell/ui/app-shell'
 import { lazy, Suspense } from 'react'
+import Dashboard from '@/pages/dashboard/ui/Dashboard'
+import { Complexes } from '@/pages/complexes'
+import { Groups } from '@/pages/groups'
+import { Displays } from '@/pages/displays'
+import { Alerts } from '@/pages/alerts'
+import { Templates } from '@/pages/templates'
+import { Houses } from '@/pages/houses'
 
 const LoginPage = lazy(() => import('@/pages/auth/login'))
-// const DashboardPage = lazy(() => import('@/pages/dashboard'))
-// const TablesPage = lazy(() => import('@/pages/tables'))
-// const ChartsPage = lazy(() => import('@/pages/charts'))
-// const FormsPage = lazy(() => import('@/pages/forms'))
-// const PanelsPage = lazy(() => import('@/pages/panels'))
-// const UiKitPage = lazy(() => import('@/pages/ui-kit'))
-// const SettingsPage = lazy(() => import('@/pages/settings'))
+const DashboardPage = <Dashboard />;
+const ComplexesPage = <Complexes />;
+const GroupsPage = <Groups />;
+const DisplaysPage = <Displays />;
+const AlertsPage = <Alerts />;
+const TemplatesPage = <Templates />;
+const HousesPage = <Houses />;
+
+
 const AccessDeniedPage = lazy(() => import('@/pages/access-denied'))
 const NotFoundPage = lazy(() => import('@/pages/not-found'))
 
@@ -38,7 +47,7 @@ export const router = createBrowserRouter([
     element: S(LoginPage),
   },
   {
-    path: '/',
+    path: "/",
     element: <Navigate to={ROUTES.DASHBOARD} replace />,
   },
   {
@@ -51,53 +60,67 @@ export const router = createBrowserRouter([
         <AppShell />
       </RequireAuth>
     ),
-    // children: [
-    //   {
-    //     path: ROUTES.DASHBOARD,
-    //     element: (
-    //       <RequirePermission permission="dashboard:view">{S(DashboardPage)}</RequirePermission>
-    //     ),
-    //   },
-    //   {
-    //     path: ROUTES.TABLES,
-    //     element: (
-    //       <RequirePermission permission="users:view">{S(TablesPage)}</RequirePermission>
-    //     ),
-    //   },
-    //   {
-    //     path: ROUTES.CHARTS,
-    //     element: (
-    //       <RequirePermission permission="analytics:view">{S(ChartsPage)}</RequirePermission>
-    //     ),
-    //   },
-    //   {
-    //     path: ROUTES.FORMS,
-    //     element: (
-    //       <RequirePermission permission="users:view">{S(FormsPage)}</RequirePermission>
-    //     ),
-    //   },
-    //   {
-    //     path: ROUTES.PANELS,
-    //     element: (
-    //       <RequirePermission permission="users:view">{S(PanelsPage)}</RequirePermission>
-    //     ),
-    //   },
-    //   {
-    //     path: ROUTES.UI_KIT,
-    //     element: (
-    //       <RequirePermission permission="ui-kit:view">{S(UiKitPage)}</RequirePermission>
-    //     ),
-    //   },
-    //   {
-    //     path: ROUTES.SETTINGS,
-    //     element: (
-    //       <RequirePermission permission="settings:view">{S(SettingsPage)}</RequirePermission>
-    //     ),
-    //   },
-    // ],
+    children: [
+      {
+        path: ROUTES.DASHBOARD,
+        element: (
+          <RequirePermission permission="dashboard:view">
+            {DashboardPage}
+          </RequirePermission>
+        ),
+      },
+      {
+        path: ROUTES.COMPLEXES,
+        element: (
+          <RequirePermission permission="users:view">
+            {ComplexesPage}
+          </RequirePermission>
+        ),
+      },
+      {
+        path: ROUTES.GROUPS,
+        element: (
+          <RequirePermission permission="analytics:view">
+            {GroupsPage}
+          </RequirePermission>
+        ),
+      },
+      {
+        path: ROUTES.DISPLAYS,
+        element: (
+          <RequirePermission permission="users:view">
+            {DisplaysPage}
+          </RequirePermission>
+        ),
+      },
+      {
+        path: ROUTES.ALERTS,
+        element: (
+          <RequirePermission permission="users:view">
+            {AlertsPage}
+          </RequirePermission>
+        ),
+      },
+      {
+        path: ROUTES.TEMPLATES,
+        element: (
+          <RequirePermission permission="ui-kit:view">
+            {TemplatesPage}
+          </RequirePermission>
+        ),
+      },
+      {
+        path: ROUTES.HOUSES,
+        element: (
+          <RequirePermission permission="settings:view">
+            {HousesPage}
+          </RequirePermission>
+        ),
+      },
+    ],
   },
   {
     path: ROUTES.NOT_FOUND,
     element: S(NotFoundPage),
   },
-])
+]);

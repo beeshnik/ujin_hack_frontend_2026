@@ -28,7 +28,7 @@ export function AppHeader() {
           <SheetContent side="left" className="w-64 p-0">
             <SheetHeader className="px-4 py-3 border-b">
               <SheetTitle className="text-left text-sm font-semibold">
-                Frontend Starter Kit
+                Monitor Play
               </SheetTitle>
             </SheetHeader>
             <AppSidebar onNavigate={() => setMobileOpen(false)} />
