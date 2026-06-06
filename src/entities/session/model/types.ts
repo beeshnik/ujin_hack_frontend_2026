@@ -1,4 +1,4 @@
-export type UserRole = 'admin' | 'manager' | 'user' | 'guest'
+export type UserRole = 'admin' | 'user' 
 
 export type Permission =
   | 'dashboard:view'
@@ -20,14 +20,12 @@ export type Permission =
   | 'ui-kit:view'
 
 export interface SessionUser {
-  id: string
-  name: string
-  email: string
   role: UserRole
 }
 
 export interface Session {
   user: SessionUser
-  accessToken: string
+  accessToken: string,
+  refreshToken: string,
   permissions: Permission[]
 }
