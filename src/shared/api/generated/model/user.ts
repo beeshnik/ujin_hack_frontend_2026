@@ -12,9 +12,10 @@
  *
  * OpenAPI spec version: 2.0.0
  */
+import type { Role } from './role';
 
-export interface RegisterRequest {
+export interface User {
+  id: string;
   name: string;
-  login: string;
-  password: string;
+  role: Role;
 }
