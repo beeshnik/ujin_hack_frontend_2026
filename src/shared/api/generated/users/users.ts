@@ -12,10 +12,7 @@
  *
  * OpenAPI spec version: 2.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -28,231 +25,285 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
 import type {
   NotFoundResponse,
   SetRoleRequest,
   UnauthorizedResponse,
-  User
-} from '../model';
+  User,
+} from "../model";
 
-import { axiosInstance } from '../../axios-instance';
+import { axiosInstance } from "../../axios-instance";
 
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 export type getMeResponse200 = {
-  data: User
-  status: 200
-}
+  data: User;
+  status: 200;
+};
 
 export type getMeResponse401 = {
-  data: UnauthorizedResponse
-  status: 401
-}
-
-export type getMeResponseSuccess = (getMeResponse200) & {
-  headers: Headers;
-};
-export type getMeResponseError = (getMeResponse401) & {
-  headers: Headers;
+  data: UnauthorizedResponse;
+  status: 401;
 };
 
-export type getMeResponse = (getMeResponseSuccess | getMeResponseError)
+export type getMeResponseSuccess = getMeResponse200 & {
+  headers: Headers;
+};
+export type getMeResponseError = getMeResponse401 & {
+  headers: Headers;
+};
+
+export type getMeResponse = getMeResponseSuccess | getMeResponseError;
 
 export const getGetMeUrl = () => {
-
-
-
-
-  return `/users/me`
-}
+  return `/users/me`;
+};
 
 /**
  * @summary Получить информацию о текущем пользователе
  */
-export const getMe = async ( options?: RequestInit): Promise<getMeResponse> => {
-
-  return axiosInstance<getMeResponse>(getGetMeUrl(),
-  {
+export const getMe = async (options?: RequestInit): Promise<getMeResponse> => {
+  return axiosInstance<getMeResponse>(getGetMeUrl(), {
     ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-
-
+    method: "GET",
+  });
+};
 
 export const getGetMeQueryKey = () => {
-    return [
-    `/users/me`
-    ] as const;
-    }
+  return [`/users/me`] as const;
+};
 
+export const getGetMeQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMe>>,
+  TError = UnauthorizedResponse,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof axiosInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-export const getGetMeQueryOptions = <TData = Awaited<ReturnType<typeof getMe>>, TError = UnauthorizedResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>>, }
-) => {
+  const queryKey = queryOptions?.queryKey ?? getGetMeQueryKey();
 
-const {query: queryOptions} = options ?? {};
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMe>>> = ({
+    signal,
+  }) => getMe({ signal, ...requestOptions });
 
-  const queryKey =  queryOptions?.queryKey ?? getGetMeQueryKey();
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getMe>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetMeQueryResult = NonNullable<Awaited<ReturnType<typeof getMe>>>;
+export type GetMeQueryError = UnauthorizedResponse;
 
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMe>>> = ({ signal }) => getMe({ signal });
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetMeQueryResult = NonNullable<Awaited<ReturnType<typeof getMe>>>
-export type GetMeQueryError = UnauthorizedResponse
-
-
-export function useGetMe<TData = Awaited<ReturnType<typeof getMe>>, TError = UnauthorizedResponse>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>> & Pick<
+export function useGetMe<
+  TData = Awaited<ReturnType<typeof getMe>>,
+  TError = UnauthorizedResponse,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getMe>>,
           TError,
           Awaited<ReturnType<typeof getMe>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMe<TData = Awaited<ReturnType<typeof getMe>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof axiosInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMe<
+  TData = Awaited<ReturnType<typeof getMe>>,
+  TError = UnauthorizedResponse,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getMe>>,
           TError,
           Awaited<ReturnType<typeof getMe>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMe<TData = Awaited<ReturnType<typeof getMe>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>>, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof axiosInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMe<
+  TData = Awaited<ReturnType<typeof getMe>>,
+  TError = UnauthorizedResponse,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof axiosInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary Получить информацию о текущем пользователе
  */
 
-export function useGetMe<TData = Awaited<ReturnType<typeof getMe>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>>, }
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetMe<
+  TData = Awaited<ReturnType<typeof getMe>>,
+  TError = UnauthorizedResponse,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof axiosInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetMeQueryOptions(options);
 
-  const queryOptions = getGetMeQueryOptions(options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-
-
-
-
-
 export type setUserRoleResponse200 = {
-  data: User
-  status: 200
-}
+  data: void;
+  status: 200;
+};
 
 export type setUserRoleResponse401 = {
-  data: UnauthorizedResponse
-  status: 401
-}
+  data: UnauthorizedResponse;
+  status: 401;
+};
 
 export type setUserRoleResponse404 = {
-  data: NotFoundResponse
-  status: 404
-}
-
-export type setUserRoleResponseSuccess = (setUserRoleResponse200) & {
-  headers: Headers;
-};
-export type setUserRoleResponseError = (setUserRoleResponse401 | setUserRoleResponse404) & {
-  headers: Headers;
+  data: NotFoundResponse;
+  status: 404;
 };
 
-export type setUserRoleResponse = (setUserRoleResponseSuccess | setUserRoleResponseError)
+export type setUserRoleResponseSuccess = setUserRoleResponse200 & {
+  headers: Headers;
+};
+export type setUserRoleResponseError = (
+  | setUserRoleResponse401
+  | setUserRoleResponse404
+) & {
+  headers: Headers;
+};
 
-export const getSetUserRoleUrl = (userId: string,) => {
+export type setUserRoleResponse =
+  | setUserRoleResponseSuccess
+  | setUserRoleResponseError;
 
-
-
-
-  return `/users/${userId}/role`
-}
+export const getSetUserRoleUrl = (userId: string) => {
+  return `/users/${userId}/role`;
+};
 
 /**
  * @summary Установить роль пользователю
  */
-export const setUserRole = async (userId: string,
-    setRoleRequest: SetRoleRequest, options?: RequestInit): Promise<setUserRoleResponse> => {
-
-  return axiosInstance<setUserRoleResponse>(getSetUserRoleUrl(userId),
-  {
+export const setUserRole = async (
+  userId: string,
+  setRoleRequest: SetRoleRequest,
+  options?: RequestInit,
+): Promise<setUserRoleResponse> => {
+  return axiosInstance<setUserRoleResponse>(getSetUserRoleUrl(userId), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(setRoleRequest)
-  }
-);}
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(setRoleRequest),
+  });
+};
 
+export const getSetUserRoleMutationOptions = <
+  TError = UnauthorizedResponse | NotFoundResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof setUserRole>>,
+    TError,
+    { userId: string; data: SetRoleRequest },
+    TContext
+  >;
+  request?: SecondParameter<typeof axiosInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof setUserRole>>,
+  TError,
+  { userId: string; data: SetRoleRequest },
+  TContext
+> => {
+  const mutationKey = ["setUserRole"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof setUserRole>>,
+    { userId: string; data: SetRoleRequest }
+  > = (props) => {
+    const { userId, data } = props ?? {};
 
+    return setUserRole(userId, data, requestOptions);
+  };
 
-export const getSetUserRoleMutationOptions = <TError = UnauthorizedResponse | NotFoundResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setUserRole>>, TError,{userId: string;data: SetRoleRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof setUserRole>>, TError,{userId: string;data: SetRoleRequest}, TContext> => {
+  return { mutationFn, ...mutationOptions };
+};
 
-const mutationKey = ['setUserRole'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+export type SetUserRoleMutationResult = NonNullable<
+  Awaited<ReturnType<typeof setUserRole>>
+>;
+export type SetUserRoleMutationBody = SetRoleRequest;
+export type SetUserRoleMutationError = UnauthorizedResponse | NotFoundResponse;
 
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof setUserRole>>, {userId: string;data: SetRoleRequest}> = (props) => {
-          const {userId,data} = props ?? {};
-
-          return  setUserRole(userId,data,)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SetUserRoleMutationResult = NonNullable<Awaited<ReturnType<typeof setUserRole>>>
-    export type SetUserRoleMutationBody = SetRoleRequest
-    export type SetUserRoleMutationError = UnauthorizedResponse | NotFoundResponse
-
-    /**
+/**
  * @summary Установить роль пользователю
  */
-export const useSetUserRole = <TError = UnauthorizedResponse | NotFoundResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setUserRole>>, TError,{userId: string;data: SetRoleRequest}, TContext>, }
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof setUserRole>>,
-        TError,
-        {userId: string;data: SetRoleRequest},
-        TContext
-      > => {
-      return useMutation(getSetUserRoleMutationOptions(options), queryClient);
-    }
+export const useSetUserRole = <
+  TError = UnauthorizedResponse | NotFoundResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof setUserRole>>,
+      TError,
+      { userId: string; data: SetRoleRequest },
+      TContext
+    >;
+    request?: SecondParameter<typeof axiosInstance>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof setUserRole>>,
+  TError,
+  { userId: string; data: SetRoleRequest },
+  TContext
+> => {
+  return useMutation(getSetUserRoleMutationOptions(options), queryClient);
+};

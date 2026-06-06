@@ -26,5 +26,3 @@ import type {
 
 export const getGetMeResponseMock = (overrideResponse: Partial<Extract<User, object>> = {}): User => ({id: faker.string.uuid(), name: faker.string.alpha({length: {min: 10, max: 20}}), role: faker.helpers.arrayElement(Object.values(Role)), ...overrideResponse})
 
-export const getSetUserRoleResponseMock = (overrideResponse: Partial<Extract<User, object>> = {}): User => ({id: faker.string.uuid(), name: faker.string.alpha({length: {min: 10, max: 20}}), role: faker.helpers.arrayElement(Object.values(Role)), ...overrideResponse})
-

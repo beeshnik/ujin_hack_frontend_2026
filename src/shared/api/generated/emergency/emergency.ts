@@ -31,6 +31,8 @@ import type {
 import { axiosInstance } from '../../axios-instance';
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 export type createEmergencyResponse201 = {
@@ -78,15 +80,15 @@ export const createEmergency = async (emergencyInput: EmergencyInput, options?: 
 
 
 export const getCreateEmergencyMutationOptions = <TError = UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createEmergency>>, TError,{data: EmergencyInput}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createEmergency>>, TError,{data: EmergencyInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof createEmergency>>, TError,{data: EmergencyInput}, TContext> => {
 
 const mutationKey = ['createEmergency'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -94,7 +96,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof createEmergency>>, {data: EmergencyInput}> = (props) => {
           const {data} = props ?? {};
 
-          return  createEmergency(data,)
+          return  createEmergency(data,requestOptions)
         }
 
 
@@ -112,7 +114,7 @@ const {mutation: mutationOptions} = options ?
  * @summary Создать экстренное сообщение
  */
 export const useCreateEmergency = <TError = UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createEmergency>>, TError,{data: EmergencyInput}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createEmergency>>, TError,{data: EmergencyInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createEmergency>>,
         TError,

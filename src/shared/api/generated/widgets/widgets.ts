@@ -35,6 +35,8 @@ import type {
 import { axiosInstance } from '../../axios-instance';
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 export type getWidgetsResponse200 = {
@@ -89,16 +91,16 @@ export const getGetWidgetsQueryKey = () => {
     }
 
 
-export const getGetWidgetsQueryOptions = <TData = Awaited<ReturnType<typeof getWidgets>>, TError = UnauthorizedResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWidgets>>, TError, TData>>, }
+export const getGetWidgetsQueryOptions = <TData = Awaited<ReturnType<typeof getWidgets>>, TError = UnauthorizedResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWidgets>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetWidgetsQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWidgets>>> = ({ signal }) => getWidgets({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWidgets>>> = ({ signal }) => getWidgets({ signal, ...requestOptions });
 
 
 
@@ -118,7 +120,7 @@ export function useGetWidgets<TData = Awaited<ReturnType<typeof getWidgets>>, TE
           TError,
           Awaited<ReturnType<typeof getWidgets>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetWidgets<TData = Awaited<ReturnType<typeof getWidgets>>, TError = UnauthorizedResponse>(
@@ -128,11 +130,11 @@ export function useGetWidgets<TData = Awaited<ReturnType<typeof getWidgets>>, TE
           TError,
           Awaited<ReturnType<typeof getWidgets>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetWidgets<TData = Awaited<ReturnType<typeof getWidgets>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWidgets>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWidgets>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -140,7 +142,7 @@ export function useGetWidgets<TData = Awaited<ReturnType<typeof getWidgets>>, TE
  */
 
 export function useGetWidgets<TData = Awaited<ReturnType<typeof getWidgets>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWidgets>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWidgets>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

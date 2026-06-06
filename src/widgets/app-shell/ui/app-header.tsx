@@ -35,7 +35,7 @@ export function AppHeader() {
           </SheetContent>
         </Sheet>
 
-        <span className="hidden text-sm font-semibold md:block">Frontend Starter Kit</span>
+        <span className="hidden text-sm font-semibold md:block">Frontend</span>
       </div>
 
       <div className="flex items-center gap-1">

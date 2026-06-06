@@ -34,8 +34,6 @@ import type {
 
 export const getGetMeResponseMock = (overrideResponse: Partial<Extract<User, object>> = {}): User => ({id: faker.string.uuid(), name: faker.string.alpha({length: {min: 10, max: 20}}), role: faker.helpers.arrayElement(Object.values(Role)), ...overrideResponse})
 
-export const getSetUserRoleResponseMock = (overrideResponse: Partial<Extract<User, object>> = {}): User => ({id: faker.string.uuid(), name: faker.string.alpha({length: {min: 10, max: 20}}), role: faker.helpers.arrayElement(Object.values(Role)), ...overrideResponse})
-
 
 export const getGetMeMockHandler = (overrideResponse?: User | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<User> | User), options?: RequestHandlerOptions) => {
   return http.get('*/users/me', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
@@ -49,13 +47,11 @@ export const getGetMeMockHandler = (overrideResponse?: User | ((info: Parameters
   }, options)
 }
 
-export const getSetUserRoleMockHandler = (overrideResponse?: User | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<User> | User), options?: RequestHandlerOptions) => {
+export const getSetUserRoleMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
   return http.post('*/users/:userId/role', async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
+  if (typeof overrideResponse === 'function') {await overrideResponse(info); }
 
-
-    return HttpResponse.json(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getSetUserRoleResponseMock(),
+    return new HttpResponse(null,
       { status: 200
       })
   }, options)
