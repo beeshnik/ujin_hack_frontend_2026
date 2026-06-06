@@ -75,6 +75,10 @@ export function DashboardGrid() {
     ])
   }
 
+  function handleRemoveObject(id: string) {
+    setLayout((currentLayout) => currentLayout.filter((item) => item.i !== id))
+  }
+
   function handleColumnsChange(value: GridColumns) {
     setColumns(value)
     setLayout([])
@@ -126,9 +130,17 @@ export function DashboardGrid() {
           >
             {layout.map((item) => (
               <div key={item.i} className="dashboard-grid__item">
+                <button
+                  type="button"
+                  className="dashboard-grid__remove-button"
+                  onMouseDown={(event) => event.stopPropagation()}
+                  onClick={() => handleRemoveObject(item.i)}
+                >
+                  ×
+                </button>
                 {item.i.toUpperCase()}
               </div>
-            ))}
+            ))} 
           </ReactGridLayout>
         )}
       </div>
