@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   frontend:
-    image: ghcr.io/ujin_hack_frontend_2026:latest
+    image: ghcr.io/beeshnik/ujin_hack_frontend_2026:latest
     container_name: frontend
     restart: always
     ports:
