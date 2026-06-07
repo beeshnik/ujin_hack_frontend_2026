@@ -25,11 +25,12 @@ import type {
 } from 'msw';
 
 import type {
+  LightTemplate,
   Template
 } from '../model';
 
 
-export const getGetTemplatesResponseMock = (): Template[] => (Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), body: {}})))
+export const getGetTemplatesResponseMock = (): LightTemplate[] => (Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}})})))
 
 export const getCreateTemplateResponseMock = (overrideResponse: Partial<Extract<Template, object>> = {}): Template => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), body: {}, ...overrideResponse})
 
@@ -38,7 +39,7 @@ export const getGetTemplateByIdResponseMock = (overrideResponse: Partial<Extract
 export const getUpdateTemplateResponseMock = (overrideResponse: Partial<Extract<Template, object>> = {}): Template => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), body: {}, ...overrideResponse})
 
 
-export const getGetTemplatesMockHandler = (overrideResponse?: Template[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Template[]> | Template[]), options?: RequestHandlerOptions) => {
+export const getGetTemplatesMockHandler = (overrideResponse?: LightTemplate[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<LightTemplate[]> | LightTemplate[]), options?: RequestHandlerOptions) => {
   return http.get('*/templates', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
 
 

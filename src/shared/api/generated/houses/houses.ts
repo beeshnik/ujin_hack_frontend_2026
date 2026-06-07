@@ -13,22 +13,28 @@
  * OpenAPI spec version: 2.0.0
  */
 import {
+  useMutation,
   useQuery
 } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
+  MutationFunction,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
   House,
+  LinkInput,
+  NotFoundResponse,
   UnauthorizedResponse
 } from '../model';
 
@@ -158,3 +164,99 @@ export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TErr
 
 
 
+export type linkHouseResponse201 = {
+  data: void
+  status: 201
+}
+
+export type linkHouseResponse401 = {
+  data: UnauthorizedResponse
+  status: 401
+}
+
+export type linkHouseResponse404 = {
+  data: NotFoundResponse
+  status: 404
+}
+
+export type linkHouseResponseSuccess = (linkHouseResponse201) & {
+  headers: Headers;
+};
+export type linkHouseResponseError = (linkHouseResponse401 | linkHouseResponse404) & {
+  headers: Headers;
+};
+
+export type linkHouseResponse = (linkHouseResponseSuccess | linkHouseResponseError)
+
+export const getLinkHouseUrl = (complexId: number,
+    id: number,) => {
+
+
+
+
+  return `/complexes/${complexId}/houses/${id}/link`
+}
+
+/**
+ * @summary Установить шаблон на все дисплеи в доме
+ */
+export const linkHouse = async (complexId: number,
+    id: number,
+    linkInput: LinkInput, options?: RequestInit): Promise<linkHouseResponse> => {
+
+  return axiosInstance<linkHouseResponse>(getLinkHouseUrl(complexId,id),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(linkInput)
+  }
+);}
+
+
+
+
+export const getLinkHouseMutationOptions = <TError = UnauthorizedResponse | NotFoundResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof linkHouse>>, TError,{complexId: number;id: number;data: LinkInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof linkHouse>>, TError,{complexId: number;id: number;data: LinkInput}, TContext> => {
+
+const mutationKey = ['linkHouse'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof linkHouse>>, {complexId: number;id: number;data: LinkInput}> = (props) => {
+          const {complexId,id,data} = props ?? {};
+
+          return  linkHouse(complexId,id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type LinkHouseMutationResult = NonNullable<Awaited<ReturnType<typeof linkHouse>>>
+    export type LinkHouseMutationBody = LinkInput
+    export type LinkHouseMutationError = UnauthorizedResponse | NotFoundResponse
+
+    /**
+ * @summary Установить шаблон на все дисплеи в доме
+ */
+export const useLinkHouse = <TError = UnauthorizedResponse | NotFoundResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof linkHouse>>, TError,{complexId: number;id: number;data: LinkInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof linkHouse>>,
+        TError,
+        {complexId: number;id: number;data: LinkInput},
+        TContext
+      > => {
+      return useMutation(getLinkHouseMutationOptions(options), queryClient);
+    }

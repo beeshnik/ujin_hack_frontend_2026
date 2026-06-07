@@ -43,6 +43,17 @@ export const getGetHousesMockHandler = (overrideResponse?: House[] | ((info: Par
       })
   }, options)
 }
+
+export const getLinkHouseMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
+  return http.post('*/complexes/:complexId/houses/:id/link', async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
+  if (typeof overrideResponse === 'function') {await overrideResponse(info); }
+
+    return new HttpResponse(null,
+      { status: 201
+      })
+  }, options)
+}
 export const getHousesMock = () => [
-  getGetHousesMockHandler()
+  getGetHousesMockHandler(),
+  getLinkHouseMockHandler()
 ]
