@@ -13,12 +13,7 @@
  * OpenAPI spec version: 2.0.0
  */
 
-export interface DisplayInput {
+export interface LightTemplate {
+  id: number;
   name: string;
-  template_id?: number;
-  house_id: number;
-  /** @nullable */
-  floor?: number | null;
-  /** @nullable */
-  entrance?: number | null;
 }

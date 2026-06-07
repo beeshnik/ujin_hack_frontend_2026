@@ -13,22 +13,28 @@
  * OpenAPI spec version: 2.0.0
  */
 import {
+  useMutation,
   useQuery
 } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
+  MutationFunction,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
   House,
+  LinkInput,
+  NotFoundResponse,
   UnauthorizedResponse
 } from '../model';
 
@@ -58,20 +64,20 @@ export type getHousesResponseError = (getHousesResponse401) & {
 
 export type getHousesResponse = (getHousesResponseSuccess | getHousesResponseError)
 
-export const getGetHousesUrl = () => {
+export const getGetHousesUrl = (complexId: number,) => {
 
 
 
 
-  return `/houses`
+  return `/complexes/${complexId}/houses`
 }
 
 /**
  * @summary Получить список домов
  */
-export const getHouses = async ( options?: RequestInit): Promise<getHousesResponse> => {
+export const getHouses = async (complexId: number, options?: RequestInit): Promise<getHousesResponse> => {
 
-  return axiosInstance<getHousesResponse>(getGetHousesUrl(),
+  return axiosInstance<getHousesResponse>(getGetHousesUrl(complexId),
   {
     ...options,
     method: 'GET'
@@ -84,29 +90,29 @@ export const getHouses = async ( options?: RequestInit): Promise<getHousesRespon
 
 
 
-export const getGetHousesQueryKey = () => {
+export const getGetHousesQueryKey = (complexId: number,) => {
     return [
-    `/houses`
+    `/complexes/${complexId}/houses`
     ] as const;
     }
 
 
-export const getGetHousesQueryOptions = <TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+export const getGetHousesQueryOptions = <TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>(complexId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetHousesQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetHousesQueryKey(complexId);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHouses>>> = ({ signal }) => getHouses({ signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHouses>>> = ({ signal }) => getHouses(complexId, { signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: complexId !== null && complexId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetHousesQueryResult = NonNullable<Awaited<ReturnType<typeof getHouses>>>
@@ -114,7 +120,7 @@ export type GetHousesQueryError = UnauthorizedResponse
 
 
 export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>> & Pick<
+ complexId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getHouses>>,
           TError,
@@ -124,7 +130,7 @@ export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TErr
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>> & Pick<
+ complexId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getHouses>>,
           TError,
@@ -134,7 +140,7 @@ export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TErr
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+ complexId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -142,11 +148,11 @@ export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TErr
  */
 
 export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+ complexId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetHousesQueryOptions(options)
+  const queryOptions = getGetHousesQueryOptions(complexId,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -158,3 +164,99 @@ export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TErr
 
 
 
+export type linkHouseResponse201 = {
+  data: void
+  status: 201
+}
+
+export type linkHouseResponse401 = {
+  data: UnauthorizedResponse
+  status: 401
+}
+
+export type linkHouseResponse404 = {
+  data: NotFoundResponse
+  status: 404
+}
+
+export type linkHouseResponseSuccess = (linkHouseResponse201) & {
+  headers: Headers;
+};
+export type linkHouseResponseError = (linkHouseResponse401 | linkHouseResponse404) & {
+  headers: Headers;
+};
+
+export type linkHouseResponse = (linkHouseResponseSuccess | linkHouseResponseError)
+
+export const getLinkHouseUrl = (complexId: number,
+    id: number,) => {
+
+
+
+
+  return `/complexes/${complexId}/houses/${id}/link`
+}
+
+/**
+ * @summary Установить шаблон на все дисплеи в доме
+ */
+export const linkHouse = async (complexId: number,
+    id: number,
+    linkInput: LinkInput, options?: RequestInit): Promise<linkHouseResponse> => {
+
+  return axiosInstance<linkHouseResponse>(getLinkHouseUrl(complexId,id),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(linkInput)
+  }
+);}
+
+
+
+
+export const getLinkHouseMutationOptions = <TError = UnauthorizedResponse | NotFoundResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof linkHouse>>, TError,{complexId: number;id: number;data: LinkInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof linkHouse>>, TError,{complexId: number;id: number;data: LinkInput}, TContext> => {
+
+const mutationKey = ['linkHouse'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof linkHouse>>, {complexId: number;id: number;data: LinkInput}> = (props) => {
+          const {complexId,id,data} = props ?? {};
+
+          return  linkHouse(complexId,id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type LinkHouseMutationResult = NonNullable<Awaited<ReturnType<typeof linkHouse>>>
+    export type LinkHouseMutationBody = LinkInput
+    export type LinkHouseMutationError = UnauthorizedResponse | NotFoundResponse
+
+    /**
+ * @summary Установить шаблон на все дисплеи в доме
+ */
+export const useLinkHouse = <TError = UnauthorizedResponse | NotFoundResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof linkHouse>>, TError,{complexId: number;id: number;data: LinkInput}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof linkHouse>>,
+        TError,
+        {complexId: number;id: number;data: LinkInput},
+        TContext
+      > => {
+      return useMutation(getLinkHouseMutationOptions(options), queryClient);
+    }

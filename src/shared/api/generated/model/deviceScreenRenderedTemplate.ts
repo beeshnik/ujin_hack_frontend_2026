@@ -12,13 +12,8 @@
  *
  * OpenAPI spec version: 2.0.0
  */
+import type { RenderedWidget } from './renderedWidget';
 
-export interface DisplayInput {
-  name: string;
-  template_id?: number;
-  house_id: number;
-  /** @nullable */
-  floor?: number | null;
-  /** @nullable */
-  entrance?: number | null;
-}
+export type DeviceScreenRenderedTemplate = {
+  widgets: RenderedWidget[];
+};

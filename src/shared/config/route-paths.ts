@@ -10,6 +10,7 @@ export const ROUTES = {
   HOUSES: "/houses",
   ACCESS_DENIED: "/access-denied",
   NOT_FOUND: "*",
+  DEVICE_SCREEN: "/device-screen",
 } as const;
 
 export type RoutePath = (typeof ROUTES)[keyof typeof ROUTES]

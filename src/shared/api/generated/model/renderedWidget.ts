@@ -12,13 +12,12 @@
  *
  * OpenAPI spec version: 2.0.0
  */
+import type { RenderedWidgetBody } from './renderedWidgetBody';
+import type { WidgetType } from './widgetType';
 
-export interface DisplayInput {
-  name: string;
-  template_id?: number;
-  house_id: number;
-  /** @nullable */
-  floor?: number | null;
-  /** @nullable */
-  entrance?: number | null;
+export interface RenderedWidget {
+  id: string;
+  type: WidgetType;
+  /** Произвольная JSON-структура данных виджета */
+  body: RenderedWidgetBody;
 }

@@ -46,6 +46,17 @@ export const getCreateEmergencyMockHandler = (overrideResponse?: Emergency | ((i
       })
   }, options)
 }
+
+export const getDeleteEmergencyMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
+  return http.delete('*/emergency/:emergencyId', async (info: Parameters<Parameters<typeof http.delete>[1]>[0]) => {
+  if (typeof overrideResponse === 'function') {await overrideResponse(info); }
+
+    return new HttpResponse(null,
+      { status: 204
+      })
+  }, options)
+}
 export const getEmergencyMock = () => [
-  getCreateEmergencyMockHandler()
+  getCreateEmergencyMockHandler(),
+  getDeleteEmergencyMockHandler()
 ]

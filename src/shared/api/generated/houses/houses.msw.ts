@@ -29,11 +29,11 @@ import type {
 } from '../model';
 
 
-export const getGetHousesResponseMock = (): House[] => (Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), address: faker.string.alpha({length: {min: 10, max: 20}}), floors_number: faker.number.int(), entrances_number: faker.number.int()})))
+export const getGetHousesResponseMock = (): House[] => (Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), address: faker.string.alpha({length: {min: 10, max: 20}}), floors_number: faker.number.int(), entrances_number: faker.number.int(), city: faker.string.alpha({length: {min: 10, max: 20}})})))
 
 
 export const getGetHousesMockHandler = (overrideResponse?: House[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<House[]> | House[]), options?: RequestHandlerOptions) => {
-  return http.get('*/houses', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+  return http.get('*/complexes/:complexId/houses', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -43,6 +43,17 @@ export const getGetHousesMockHandler = (overrideResponse?: House[] | ((info: Par
       })
   }, options)
 }
+
+export const getLinkHouseMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
+  return http.post('*/complexes/:complexId/houses/:id/link', async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
+  if (typeof overrideResponse === 'function') {await overrideResponse(info); }
+
+    return new HttpResponse(null,
+      { status: 201
+      })
+  }, options)
+}
 export const getHousesMock = () => [
-  getGetHousesMockHandler()
+  getGetHousesMockHandler(),
+  getLinkHouseMockHandler()
 ]

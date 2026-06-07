@@ -1,0 +1,33 @@
+.tv-screen {
+  width: min(100vw, calc(100vh * 9 / 16));
+  height: min(100vh, calc(100vw * 16 / 9));
+  aspect-ratio: 9 / 16;
+  background: #dbe3ef;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.alarm {
+  flex: 0 0 0;
+  overflow: hidden;
+  opacity: 0;
+  background: #cc0000;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1.1;
+  text-transform: uppercase;
+  transition: 0.25s;
+}
+
+.alarm-on {
+  flex-basis: 10%;
+  opacity: 1;
+  padding: 0 24px;
+}
+
