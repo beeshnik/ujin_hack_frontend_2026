@@ -13,6 +13,7 @@ import { Badge } from '@/shared/ui/badge'
 import { useSessionStore } from '@/entities/session/model/session-store'
 import { useLogout } from '@/features/auth/logout'
 import { ROUTES } from '@/shared/config/route-paths'
+import { useGetMe } from '@/shared/api/generated/users/users'
 
 const ROLE_LABELS: Record<string, string> = {
   admin: 'Администратор',
@@ -34,6 +35,15 @@ export function UserMenu() {
   const session = useSessionStore((s) => s.session)
   const { logout } = useLogout()
   const navigate = useNavigate()
+
+  // const {data: me} = useGetMe()
+
+  // const user = me ? me. : {
+  //   name: "Пользователь",
+  //   role: "USER",
+  //   id: "someId"
+
+  // }
 
   if (!session) return null
 
