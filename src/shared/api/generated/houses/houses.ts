@@ -58,20 +58,20 @@ export type getHousesResponseError = (getHousesResponse401) & {
 
 export type getHousesResponse = (getHousesResponseSuccess | getHousesResponseError)
 
-export const getGetHousesUrl = () => {
+export const getGetHousesUrl = (complexId: number,) => {
 
 
 
 
-  return `/houses`
+  return `/complexes/${complexId}/houses`
 }
 
 /**
  * @summary Получить список домов
  */
-export const getHouses = async ( options?: RequestInit): Promise<getHousesResponse> => {
+export const getHouses = async (complexId: number, options?: RequestInit): Promise<getHousesResponse> => {
 
-  return axiosInstance<getHousesResponse>(getGetHousesUrl(),
+  return axiosInstance<getHousesResponse>(getGetHousesUrl(complexId),
   {
     ...options,
     method: 'GET'
@@ -84,29 +84,29 @@ export const getHouses = async ( options?: RequestInit): Promise<getHousesRespon
 
 
 
-export const getGetHousesQueryKey = () => {
+export const getGetHousesQueryKey = (complexId: number,) => {
     return [
-    `/houses`
+    `/complexes/${complexId}/houses`
     ] as const;
     }
 
 
-export const getGetHousesQueryOptions = <TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+export const getGetHousesQueryOptions = <TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>(complexId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetHousesQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetHousesQueryKey(complexId);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHouses>>> = ({ signal }) => getHouses({ signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHouses>>> = ({ signal }) => getHouses(complexId, { signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: complexId !== null && complexId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetHousesQueryResult = NonNullable<Awaited<ReturnType<typeof getHouses>>>
@@ -114,7 +114,7 @@ export type GetHousesQueryError = UnauthorizedResponse
 
 
 export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>> & Pick<
+ complexId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getHouses>>,
           TError,
@@ -124,7 +124,7 @@ export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TErr
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>> & Pick<
+ complexId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getHouses>>,
           TError,
@@ -134,7 +134,7 @@ export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TErr
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+ complexId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -142,11 +142,11 @@ export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TErr
  */
 
 export function useGetHouses<TData = Awaited<ReturnType<typeof getHouses>>, TError = UnauthorizedResponse>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+ complexId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHouses>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetHousesQueryOptions(options)
+  const queryOptions = getGetHousesQueryOptions(complexId,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

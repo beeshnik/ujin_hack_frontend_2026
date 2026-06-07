@@ -29,17 +29,17 @@ import type {
 } from '../model';
 
 
-export const getGetDisplaysResponseMock = (): Display[] => (Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), template_id: faker.number.int(), house_id: faker.number.int(), floor: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined]), entrance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined])})))
+export const getGetDisplaysResponseMock = (): Display[] => (Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.number.int(), token: faker.string.alpha({length: {min: 10, max: 20}}), name: faker.string.alpha({length: {min: 10, max: 20}}), template_id: faker.helpers.arrayElement([faker.number.int(), undefined]), house_id: faker.number.int(), floor: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined]), entrance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined])})))
 
-export const getCreateDisplayResponseMock = (overrideResponse: Partial<Extract<Display, object>> = {}): Display => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), template_id: faker.number.int(), house_id: faker.number.int(), floor: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined]), entrance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined]), ...overrideResponse})
+export const getCreateDisplayResponseMock = (overrideResponse: Partial<Extract<Display, object>> = {}): Display => ({id: faker.number.int(), token: faker.string.alpha({length: {min: 10, max: 20}}), name: faker.string.alpha({length: {min: 10, max: 20}}), template_id: faker.helpers.arrayElement([faker.number.int(), undefined]), house_id: faker.number.int(), floor: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined]), entrance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined]), ...overrideResponse})
 
-export const getGetDisplayByIdResponseMock = (overrideResponse: Partial<Extract<Display, object>> = {}): Display => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), template_id: faker.number.int(), house_id: faker.number.int(), floor: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined]), entrance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined]), ...overrideResponse})
+export const getGetDisplayByIdResponseMock = (overrideResponse: Partial<Extract<Display, object>> = {}): Display => ({id: faker.number.int(), token: faker.string.alpha({length: {min: 10, max: 20}}), name: faker.string.alpha({length: {min: 10, max: 20}}), template_id: faker.helpers.arrayElement([faker.number.int(), undefined]), house_id: faker.number.int(), floor: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined]), entrance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined]), ...overrideResponse})
 
-export const getUpdateDisplayResponseMock = (overrideResponse: Partial<Extract<Display, object>> = {}): Display => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), template_id: faker.number.int(), house_id: faker.number.int(), floor: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined]), entrance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined]), ...overrideResponse})
+export const getUpdateDisplayResponseMock = (overrideResponse: Partial<Extract<Display, object>> = {}): Display => ({id: faker.number.int(), token: faker.string.alpha({length: {min: 10, max: 20}}), name: faker.string.alpha({length: {min: 10, max: 20}}), template_id: faker.helpers.arrayElement([faker.number.int(), undefined]), house_id: faker.number.int(), floor: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined]), entrance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int(), null]), undefined]), ...overrideResponse})
 
 
 export const getGetDisplaysMockHandler = (overrideResponse?: Display[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Display[]> | Display[]), options?: RequestHandlerOptions) => {
-  return http.get('*/houses/:id/displays', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+  return http.get('*/complexes/:complexId/houses/:id/displays', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -51,7 +51,7 @@ export const getGetDisplaysMockHandler = (overrideResponse?: Display[] | ((info:
 }
 
 export const getCreateDisplayMockHandler = (overrideResponse?: Display | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<Display> | Display), options?: RequestHandlerOptions) => {
-  return http.post('*/houses/:id/displays', async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
+  return http.post('*/complexes/:complexId/houses/:id/displays', async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -63,7 +63,7 @@ export const getCreateDisplayMockHandler = (overrideResponse?: Display | ((info:
 }
 
 export const getGetDisplayByIdMockHandler = (overrideResponse?: Display | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Display> | Display), options?: RequestHandlerOptions) => {
-  return http.get('*/houses/:id/displays/:displayId', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+  return http.get('*/complexes/:complexId/houses/:id/displays/:displayId', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -75,7 +75,7 @@ export const getGetDisplayByIdMockHandler = (overrideResponse?: Display | ((info
 }
 
 export const getUpdateDisplayMockHandler = (overrideResponse?: Display | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<Display> | Display), options?: RequestHandlerOptions) => {
-  return http.put('*/houses/:id/displays/:displayId', async (info: Parameters<Parameters<typeof http.put>[1]>[0]) => {
+  return http.put('*/complexes/:complexId/houses/:id/displays/:displayId', async (info: Parameters<Parameters<typeof http.put>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -87,7 +87,7 @@ export const getUpdateDisplayMockHandler = (overrideResponse?: Display | ((info:
 }
 
 export const getDeleteDisplayMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
-  return http.delete('*/houses/:id/displays/:displayId', async (info: Parameters<Parameters<typeof http.delete>[1]>[0]) => {
+  return http.delete('*/complexes/:complexId/houses/:id/displays/:displayId', async (info: Parameters<Parameters<typeof http.delete>[1]>[0]) => {
   if (typeof overrideResponse === 'function') {await overrideResponse(info); }
 
     return new HttpResponse(null,

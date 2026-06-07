@@ -15,7 +15,7 @@
 
 export interface DisplayInput {
   name: string;
-  template_id: number;
+  template_id?: number;
   house_id: number;
   /** @nullable */
   floor?: number | null;

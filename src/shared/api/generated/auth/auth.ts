@@ -126,9 +126,9 @@ export const useLogin = <TError = UnauthorizedResponse,
       > => {
       return useMutation(getLoginMutationOptions(options), queryClient);
     }
-    export type registerResponse201 = {
+    export type registerResponse200 = {
   data: void
-  status: 201
+  status: 200
 }
 
 export type registerResponse409 = {
@@ -136,7 +136,7 @@ export type registerResponse409 = {
   status: 409
 }
 
-export type registerResponseSuccess = (registerResponse201) & {
+export type registerResponseSuccess = (registerResponse200) & {
   headers: Headers;
 };
 export type registerResponseError = (registerResponse409) & {

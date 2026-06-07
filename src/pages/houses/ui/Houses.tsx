@@ -1,3 +1,14 @@
+import { BuildingsList } from "@/widgets/buildings-list";
+import { useParams } from "react-router-dom";
+
 export function Houses() {
-    return <div>Houses</div>
+    const {complexId} = useParams()
+
+    return (
+      <div>
+        {complexId && (
+          <BuildingsList complexId={Number(complexId)} />
+        )}
+      </div>
+    );
 }
