@@ -8,11 +8,11 @@ import "./device-screen.css"
 import { useGetDeviceScreen } from "@/shared/api/generated/display-screen/display-screen"
 import type { DeviceScreen } from "@/shared/api/generated/model"
 
-declare global {
-  interface Window {
-    showEmergency?: (text: string) => void
-  }
-}
+// declare global {
+//   interface Window {
+//     showEmergency?: (text: string) => void
+//   }
+// }
 
 const compactorMy = {
   type: null,
@@ -32,6 +32,18 @@ function getWidget(screenState: DeviceScreen | undefined, id: string) {
   return screenState?.rendered_template?.widgets?.find((widget) => {
     return widget.id === id
   })
+}
+
+function getActiveEmergency(screenState: DeviceScreen | undefined) {
+  const emergencies = screenState?.emergencies ?? []
+
+  if (emergencies.length === 0) {
+    return undefined
+  }
+
+  return [...emergencies].sort((a, b) => {
+    return a.priority - b.priority
+  })[0]
 }
 
 function getCard(
@@ -154,8 +166,8 @@ function getCard(
 }
 
 export function DeviceScreenPage() {
-  const [alarmText, setAlarmText] = useState("")
-  const [isAlarm, setIsAlarm] = useState(false)
+  //   const [alarmText, setAlarmText] = useState("")
+  //   const [isAlarm, setIsAlarm] = useState(false)
   const [now, setNow] = useState(new Date())
   const [screenState, setScreenState] = useState<DeviceScreen>()
 
@@ -184,34 +196,34 @@ export function DeviceScreenPage() {
 
   //   console.log(screenState)
 
-  useEffect(() => {
-    let timer: number | undefined
+  //   useEffect(() => {
+  //     let timer: number | undefined
 
-    window.showEmergency = (text: string) => {
-      console.log("ЧС:", text)
+  //     window.showEmergency = (text: string) => {
+  //       console.log("ЧС:", text)
 
-      setAlarmText(text)
-      setIsAlarm(true)
+  //       setAlarmText(text)
+  //       setIsAlarm(true)
 
-      if (timer) {
-        window.clearTimeout(timer)
-      }
+  //       if (timer) {
+  //         window.clearTimeout(timer)
+  //       }
 
-      timer = window.setTimeout(() => {
-        setIsAlarm(false)
-      }, 10000)
-    }
+  //       timer = window.setTimeout(() => {
+  //         setIsAlarm(false)
+  //       }, 60000)
+  //     }
 
-    console.log('Вызов ЧС: showEmergency("ВНИМАНИЕ! Проверка системы")')
+  //     // console.log('Вызов ЧС: showEmergency("ВНИМАНИЕ! Проверка системы")')
 
-    return () => {
-      delete window.showEmergency
+  //     return () => {
+  //       delete window.showEmergency
 
-      if (timer) {
-        window.clearTimeout(timer)
-      }
-    }
-  }, [])
+  //       if (timer) {
+  //         window.clearTimeout(timer)
+  //       }
+  //     }
+  //   }, [])
 
   const time = now.toLocaleTimeString("ru-RU", {
     hour: "2-digit",
@@ -233,11 +245,15 @@ export function DeviceScreenPage() {
 
   const currentLayout = screenTemplate?.layout ?? []
   const currentColumns = screenTemplate?.columns ?? 3
-  console.log(screenTemplate?.columns)
+  const activeEmergency = getActiveEmergency(screenState)
+  const alarmTextFromBack = activeEmergency?.text ?? ""
+  //   console.log(screenTemplate?.columns)
 
   return (
     <div className="tv-screen">
-      <div className={isAlarm ? "alarm alarm-on" : "alarm"}>{alarmText}</div>
+      <div className={activeEmergency ? "alarm alarm-on" : "alarm"}>
+        {alarmTextFromBack}
+      </div>
       <div ref={containerRef} className="tv-grid">
         {mounted && currentLayout.length > 0 && (
           <ReactGridLayout
