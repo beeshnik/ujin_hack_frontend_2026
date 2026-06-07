@@ -25,6 +25,7 @@ import type {
 import type {
   Emergency,
   EmergencyInput,
+  NotFoundResponse,
   UnauthorizedResponse
 } from '../model';
 
@@ -122,4 +123,97 @@ export const useCreateEmergency = <TError = UnauthorizedResponse,
         TContext
       > => {
       return useMutation(getCreateEmergencyMutationOptions(options), queryClient);
+    }
+    export type deleteEmergencyResponse204 = {
+  data: void
+  status: 204
+}
+
+export type deleteEmergencyResponse401 = {
+  data: UnauthorizedResponse
+  status: 401
+}
+
+export type deleteEmergencyResponse404 = {
+  data: NotFoundResponse
+  status: 404
+}
+
+export type deleteEmergencyResponseSuccess = (deleteEmergencyResponse204) & {
+  headers: Headers;
+};
+export type deleteEmergencyResponseError = (deleteEmergencyResponse401 | deleteEmergencyResponse404) & {
+  headers: Headers;
+};
+
+export type deleteEmergencyResponse = (deleteEmergencyResponseSuccess | deleteEmergencyResponseError)
+
+export const getDeleteEmergencyUrl = (emergencyId: number,) => {
+
+
+
+
+  return `/emergency/${emergencyId}`
+}
+
+/**
+ * @summary Удалить экстренное сообщение
+ */
+export const deleteEmergency = async (emergencyId: number, options?: RequestInit): Promise<deleteEmergencyResponse> => {
+
+  return axiosInstance<deleteEmergencyResponse>(getDeleteEmergencyUrl(emergencyId),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+export const getDeleteEmergencyMutationOptions = <TError = UnauthorizedResponse | NotFoundResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteEmergency>>, TError,{emergencyId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteEmergency>>, TError,{emergencyId: number}, TContext> => {
+
+const mutationKey = ['deleteEmergency'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteEmergency>>, {emergencyId: number}> = (props) => {
+          const {emergencyId} = props ?? {};
+
+          return  deleteEmergency(emergencyId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteEmergencyMutationResult = NonNullable<Awaited<ReturnType<typeof deleteEmergency>>>
+
+    export type DeleteEmergencyMutationError = UnauthorizedResponse | NotFoundResponse
+
+    /**
+ * @summary Удалить экстренное сообщение
+ */
+export const useDeleteEmergency = <TError = UnauthorizedResponse | NotFoundResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteEmergency>>, TError,{emergencyId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteEmergency>>,
+        TError,
+        {emergencyId: number},
+        TContext
+      > => {
+      return useMutation(getDeleteEmergencyMutationOptions(options), queryClient);
     }

@@ -30,15 +30,7 @@ type props = {
 }
 
 export function TemplatesToChoice({ templateList, chosenTemplate, updateClick }: props) {
-  const [chosen, setChosen] = useState()
-
-
-  useEffect(() => {
-    if (chosenTemplate) {
-      setChosen(chosen)
-    }
-  }, [chosenTemplate])
-
+  
   return (
     <div className="flex flex-col gap-4">
         <h2 className="text-[20px] font-medium">Выбранный шаблон:</h2>

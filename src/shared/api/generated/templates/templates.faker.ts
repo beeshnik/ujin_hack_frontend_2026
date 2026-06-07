@@ -17,11 +17,12 @@ import {
 } from '@faker-js/faker';
 
 import type {
+  LightTemplate,
   Template
 } from '../model';
 
 
-export const getGetTemplatesResponseMock = (): Template[] => (Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), body: {}})))
+export const getGetTemplatesResponseMock = (): LightTemplate[] => (Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}})})))
 
 export const getCreateTemplateResponseMock = (overrideResponse: Partial<Extract<Template, object>> = {}): Template => ({id: faker.number.int(), name: faker.string.alpha({length: {min: 10, max: 20}}), body: {}, ...overrideResponse})
 
