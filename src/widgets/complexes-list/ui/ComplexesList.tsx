@@ -1,7 +1,6 @@
 import { ComplexCard } from "@/entities/complexes/ui/ComplexCard";
 import { useGetComplexes } from "@/shared/api/generated/complexes/complexes"
 import type { Complex } from "@/shared/api/generated/model";
-import { useEffect, useState } from "react";
 
 export function ComplexesList() {
     const {data: complexes, status} = useGetComplexes()
