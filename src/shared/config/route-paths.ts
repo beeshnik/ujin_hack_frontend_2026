@@ -4,7 +4,7 @@ export const ROUTES = {
   DASHBOARD: "/dashboard",
   COMPLEXES: "/complexes",
   GROUPS: "/groups",
-  DISPLAYS: "/displays",
+  DISPLAYS: "/complexes/:complexId/houses/:houseId/displays",
   ALERTS: "/alerts",
   TEMPLATES: "/templates",
   HOUSES: "/complexes/:complexId/houses",

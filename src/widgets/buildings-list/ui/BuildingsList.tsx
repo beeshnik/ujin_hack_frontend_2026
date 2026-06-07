@@ -1,5 +1,8 @@
 import type { FilterDTO } from "@/entities/filter";
-import { FilterBuildings, type settings } from "@/features/filter-buildings";
+import {
+  FilterBuildings,
+  type settingsType,
+} from "@/features/filter-buildings";
 import { useGetHouses } from "@/shared/api/generated/houses/houses";
 import type { House } from "@/shared/api/generated/model";
 import { DataTable } from "@/shared/ui/data-table/data-table";
@@ -12,9 +15,6 @@ type Props = {
 };
 
 export function BuildingsList({complexId}: Props) {
-    const settings = {
-        complexes: true
-    } as settings
 
     const [houses, setHouses] = useState<House[]>()
 
@@ -22,6 +22,10 @@ export function BuildingsList({complexId}: Props) {
     const { data: housesList } = useGetHouses(complexId);
 
     const navigate = useNavigate()
+
+    const handleClick = (house: House) => {
+        navigate(`/complexes/${complexId}/houses/${house.id}/displays`);
+    }
 
     useEffect(() => {
         // console.log(filter)
@@ -76,8 +80,8 @@ export function BuildingsList({complexId}: Props) {
 
   return (
     <>
-      <FilterBuildings setFilter={setFilter} settings={settings} />
-      {houses && <DataTable data={houses} columns={columns} onRowClick={() => {navigate("/complexes");}}/>}
+      <FilterBuildings setFilter={setFilter} />
+      {houses && <DataTable data={houses} columns={columns} onRowClick={handleClick}/>}
     </>
   );
 }

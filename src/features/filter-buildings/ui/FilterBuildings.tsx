@@ -1,13 +1,12 @@
 import type { FilterDTO } from "@/entities/filter";
 import { SearchInput } from "@/shared/ui/search-input";
 import { useEffect, useState } from "react";
-import type { settings } from "../model/types";
-
+import type { settingsType } from "../model/types";
 
 
 type Props = {
   setFilter: (filter: FilterDTO) => void;
-  settings?: settings
+  settings?: settingsType;
 };
 
 export function FilterBuildings({setFilter, settings}: Props) {

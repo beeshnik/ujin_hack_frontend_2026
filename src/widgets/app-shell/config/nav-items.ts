@@ -38,12 +38,6 @@ export const NAV_ITEMS: NavItem[] = [
     permission: 'users:view',
   },
   {
-    title: 'Дисплеи',
-    href: ROUTES.DISPLAYS,
-    icon: PanelRight,
-    permission: 'users:view',
-  },
-  {
     title: 'Шаблоны',
     href: ROUTES.TEMPLATES,
     icon: Palette,

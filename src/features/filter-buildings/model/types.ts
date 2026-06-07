@@ -1,5 +1,7 @@
-export type settings = {
-    houses: boolean,
-    complexes: boolean,
-    groups: boolean
-}
+import type { Complex, House } from "@/shared/api/generated/model";
+
+export type settingsType = {
+  houses: House[];
+  complexes: Complex[];
+  // groups: Group;
+};
