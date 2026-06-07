@@ -12,6 +12,7 @@ import { Alerts } from "@/pages/alerts";
 import { Templates } from "@/pages/templates";
 import { Houses } from "@/pages/houses";
 import { RegistrationPage } from "@/pages/auth/registration";
+import { CreateTemplate } from "@/pages/create-template";
 
 const LoginPage = lazy(() => import("@/pages/auth/login"));
 const DashboardPage = <Dashboard />;
@@ -88,10 +89,14 @@ export const router = createBrowserRouter([
         path: ROUTES.HOUSES,
         element: <Houses />,
       },
+      {
+        path: ROUTES.CREATE_TEMPLATE,
+        element: <CreateTemplate />,
+      },
     ],
   },
   {
     path: ROUTES.NOT_FOUND,
     element: S(NotFoundPage),
   },
-]);
+])
