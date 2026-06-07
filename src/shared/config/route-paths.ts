@@ -12,6 +12,7 @@ export const ROUTES = {
   CREATE_TEMPLATE: "/create-template/:templateName",
   DISPLAY_PAGE: "/complexes/:complexId/houses/:houseId/display/:displayId",
   NOT_FOUND: "*",
+  DEVICE_SCREEN: "/device-screen",
 } as const;
 
 export type RoutePath = (typeof ROUTES)[keyof typeof ROUTES]
