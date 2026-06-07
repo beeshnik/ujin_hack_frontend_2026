@@ -7,19 +7,13 @@ import { useEffect, useState } from "react"
 
 export function TemplateList() {
   const [filter, setFilter] = useState<FilterDTO>()
-  const [templateList, setTemplateList] = useState<Template[]>([])
+
   const { data: templates, status, isLoading } = useGetTemplates()
 
-  useEffect(() => {
-    if (status === "success" && templates) {
-        const rawTemplates = templates.data as Template[]
-      //   const filtredTemplates = templateList.filter((template) =>
-      //     (filter && filter.name) ? template.name.includes(filter?.name) : false,
-      //   ) || []
-      setTemplateList(rawTemplates)
-      console.log(templateList)
-    }
-  }, [templates])
+  const templateArray = Array.isArray(templates?.data)
+    ? (templates.data as Template[])
+    : []
+
   return (
     <div className="flex flex-col gap-6">
       <FilterBuildings setFilter={setFilter} />
@@ -28,9 +22,13 @@ export function TemplateList() {
         <>Загрузка...</>
       ) : (
         <>
-          {templateList.length > 0 ? templateList.map((template) => (
-            <TemplateCard template={template} />
-          )) : <>Шаблонов пока нет</>}
+          {templateArray.length > 0 ? (
+            templateArray.map((template) => (
+              <TemplateCard template={template} />
+            ))
+          ) : (
+            <>Шаблонов пока нет</>
+          )}
         </>
       )}
     </div>
