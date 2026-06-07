@@ -186,7 +186,7 @@ export function DeviceScreenPage() {
   })
 
   const { data: deviceScreenData, status: deviceScreenStatus } =
-    useGetDeviceScreen("0WSO6zel")
+    useGetDeviceScreen("M8EdMJL9")
   useEffect(() => {
     if (deviceScreenStatus === "success" && deviceScreenData) {
       const rawData = deviceScreenData.data as DeviceScreen
