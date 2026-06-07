@@ -33,7 +33,7 @@ export function DisplayList({ complexId, houseId }: Props) {
 
   useEffect(() => {
     if (complexStatus === "success" && complexes) {
-      const rawComplexes = complexList.data as Complex[];
+      const rawComplexes = complexList.data as Complex[]
 
       const filtredComplexes =
         rawComplexes?.filter((complex) =>
@@ -46,11 +46,11 @@ export function DisplayList({ complexId, houseId }: Props) {
                 ? filter.name.toLowerCase()
                 : complex.name.toLowerCase(),
             ),
-        ) || [];
+        ) || []
 
-      setComplexes(filtredComplexes as Complex[]);
+      setComplexes(filtredComplexes as Complex[])
     }
-  }, [complexes]);
+  }, [complexes, houses, displays])
 
   const navigate = useNavigate();
 
@@ -120,12 +120,14 @@ export function DisplayList({ complexId, houseId }: Props) {
   return (
     <>
       <FilterBuildings setFilter={setFilter} settings={settings} />
-      {displays !== undefined ? (
+      {displays ? (
         <DataTable
           data={displays}
           columns={columns}
-          onRowClick={() => {
-            navigate("/complexes");
+          onRowClick={(display: Display) => {
+            navigate(
+              `/complexes/${complexId}/houses/${houseId}/display/${display.id}`,
+            )
           }}
         />
       ) : (<p>{"Дисплеев пока нет"}</p>)}

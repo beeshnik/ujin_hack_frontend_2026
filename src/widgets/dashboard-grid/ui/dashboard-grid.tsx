@@ -1,10 +1,19 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ReactGridLayout, { useContainerWidth } from "react-grid-layout"
 import type { Layout } from "react-grid-layout"
 
 import "react-grid-layout/css/styles.css"
 import "react-resizable/css/styles.css"
 import "./dashboard-grid.css"
+import { Button } from "@/shared/ui/button"
+import { ArrowLeft, Save } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+import { useCreateTemplate } from "@/shared/api/generated/templates/templates"
+import { useQueryClient } from "@tanstack/react-query"
+
+type props = {
+  name: string
+}
 
 type GridColumns = 3 | 4 | 6
 
@@ -12,10 +21,10 @@ type WidgetType =
   | "header"
   | "footer"
   | "weather"
-  | "house-news"
+  | "house_news"
   | "parking"
   | "storage"
-  | "external-news"
+  | "external_news"
   | "image"
   | "text"
   | "camera"
@@ -44,13 +53,25 @@ const compactorMy = {
   compact: (nextLayout: Layout) => nextLayout,
 }
 
-export function DashboardGrid() {
+export function DashboardGrid({name}: props) {
   const [columns, setColumns] = useState<GridColumns>(3)
   const [layout, setLayout] = useState<Layout>(initialLayout)
+
+  const queryClient = useQueryClient() 
+
+
+  const navigate = useNavigate()
+
+  const {mutate: createTemplate, status: createTemplateStatus} = useCreateTemplate()
 
   const { width, containerRef, mounted } = useContainerWidth({
     initialWidth: 800,
   })
+
+  useEffect(() => {
+    if (createTemplateStatus === "success")
+      queryClient.invalidateQueries({ queryKey: ["/templates"] })
+  }, [createTemplateStatus])
 
   function getWidgetType(id: string): WidgetType {
     const widget = widgetTypes.find((item) => {
@@ -193,8 +214,35 @@ export function DashboardGrid() {
     })),
   }
 
+  const handleBack = () => {
+    navigate(-1)
+  }
+
+  const handleSave = () => {
+    createTemplate({
+      data: {
+        name: name || "default_name",
+        body: gridJson,
+      },
+    })
+    if (createTemplateStatus === "success") {
+      navigate(-1)
+    }
+  }
+
+
+
   return (
     <div className="dashboard-grid-root">
+      <div className="flex flex-row justify-between">
+        <Button onClick={handleBack}>
+          <ArrowLeft /> Назад
+        </Button>
+        <Button onClick={handleSave}>
+          <Save />
+          Сохранить
+        </Button>
+      </div>
       <div className="dashboard-grid-toolbar">
         <select
           value={columns}
@@ -262,9 +310,6 @@ export function DashboardGrid() {
           </ReactGridLayout>
         )}
       </div>
-      <pre className="dashboard-grid-json">
-        {JSON.stringify(gridJson, null, 2)}
-      </pre>
     </div>
   )
 }
