@@ -14,17 +14,6 @@ declare global {
   }
 }
 
-const tvLayout: Layout = [
-  { i: "header", x: 0, y: 0, w: 4, h: 1 },
-  { i: "weather", x: 0, y: 1, w: 2, h: 2 },
-  { i: "parking", x: 2, y: 1, w: 2, h: 3 },
-  { i: "news", x: 0, y: 3, w: 2, h: 4 },
-  { i: "camera", x: 2, y: 4, w: 2, h: 4 },
-  { i: "info", x: 0, y: 7, w: 2, h: 3 },
-  { i: "promo", x: 0, y: 10, w: 4, h: 4 },
-  { i: "footer", x: 0, y: 14, w: 4, h: 2 },
-]
-
 const compactorMy = {
   type: null,
   allowOverlap: false,
@@ -32,12 +21,34 @@ const compactorMy = {
   compact: (nextLayout: Layout) => nextLayout,
 }
 
-function getCard(id: string) {
+function clearHtml(text?: string) {
+  return text
+    ?.replace(/<br\s*\/?>/gi, " ")
+    .replace(/<[^>]+>/g, "")
+    .trim()
+}
+
+function getWidget(screenState: DeviceScreen | undefined, id: string) {
+  return screenState?.rendered_template?.widgets?.find((widget) => {
+    return widget.id === id
+  })
+}
+
+function getCard(
+  id: string,
+  screenState: DeviceScreen | undefined,
+  time: string,
+  date: string,
+) {
+  const widget = getWidget(screenState, id)
+  const data = widget?.body?.data as any
   if (id === "header") {
     return (
       <div>
-        <span>09:24</span>
-        <span>8 июня</span>
+        <span>{time}</span>
+        <span>{date}</span>
+        <span>{screenState?.complexName ?? "ЖК не указан"}</span>
+        <span>{screenState?.houseName ?? "Дом не указан"}</span>
       </div>
     )
   }
@@ -46,29 +57,60 @@ function getCard(id: string) {
     return (
       <div>
         <b>Погода</b>
-        <strong>+21°</strong>
+        <strong>
+          {data?.temperature !== undefined
+            ? `${Math.round(data.temperature)}°`
+            : "—"}
+        </strong>
+        <p>{data?.city ?? "Город не указан"}</p>
+        <p>{data?.weatherType ?? "Нет данных"}</p>
       </div>
     )
   }
 
   if (id === "parking") {
+    const publicFree = data?.publicFreeTotal ?? 0
+    const privateFree = data?.privateFreeTotal ?? 0
+    const unassignedFree = data?.unassignedFreeTotal ?? 0
+    const total = publicFree + privateFree + unassignedFree
+
     return (
       <div>
         <b>Парковки</b>
-        <strong>27 свободно</strong>
-        <p>Гостевые: 8</p>
-        <p>Приватные: 14</p>
-        <p>Нераспределённые: 5</p>
+        <strong>{total} свободно</strong>
+        <p>Гостевые: {publicFree}</p>
+        <p>Приватные: {privateFree}</p>
+        <p>Нераспределённые: {unassignedFree}</p>
       </div>
     )
   }
 
-  if (id === "news") {
+  if (id === "storage") {
+    const publicFree = data?.publicFreeTotal ?? 0
+    const privateFree = data?.privateFreeTotal ?? 0
+    const unassignedFree = data?.unassignedFreeTotal ?? 0
+    const total = publicFree + privateFree + unassignedFree
+
+    return (
+      <div>
+        <b>Кладовые</b>
+        <strong>{total} свободно</strong>
+        <p>Гостевые: {publicFree}</p>
+        <p>Приватные: {privateFree}</p>
+        <p>Нераспределённые: {unassignedFree}</p>
+      </div>
+    )
+  }
+
+  if (id === "house_news") {
+    const news = Array.isArray(data) ? data[0] : undefined
+
     return (
       <div>
         <b>Новости дома</b>
-        <strong>Проверка лифтов</strong>
-        <p>9 июня с 10:00 до 14:00 будет проводиться профилактика.</p>
+        <strong>{news?.title ?? "Новостей нет"}</strong>
+        <p>{clearHtml(news?.text) ?? "Нет данных"}</p>
+        <p>{news?.date ?? ""}</p>
       </div>
     )
   }
@@ -95,9 +137,18 @@ function getCard(id: string) {
     return <div>Промо для жителей ЖК</div>
   }
 
+  if (id === "footer") {
+    return (
+      <div>
+        Аварийная служба: +7 (999) 000-00-00 · Передавайте показания до 25 числа
+      </div>
+    )
+  }
+
   return (
     <div>
-      Аварийная служба: +7 (999) 000-00-00 · Передавайте показания до 25 числа
+      <b>{id}</b>
+      <p>Нет данных для виджета</p>
     </div>
   )
 }
@@ -105,15 +156,25 @@ function getCard(id: string) {
 export function DeviceScreenPage() {
   const [alarmText, setAlarmText] = useState("")
   const [isAlarm, setIsAlarm] = useState(false)
+  const [now, setNow] = useState(new Date())
+  const [screenState, setScreenState] = useState<DeviceScreen>()
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setNow(new Date())
+    }, 60000)
+
+    return () => {
+      window.clearInterval(timer)
+    }
+  }, [])
 
   const { width, containerRef, mounted } = useContainerWidth({
     initialWidth: 360,
   })
 
-  const [screenState, setScreenState] = useState<DeviceScreen>()
   const { data: deviceScreenData, status: deviceScreenStatus } =
     useGetDeviceScreen("0WSO6zel")
-
   useEffect(() => {
     if (deviceScreenStatus === "success" && deviceScreenData) {
       const rawData = deviceScreenData.data as DeviceScreen
@@ -121,7 +182,7 @@ export function DeviceScreenPage() {
     }
   }, [deviceScreenData, deviceScreenStatus])
 
-//   console.log(screenState)
+  //   console.log(screenState)
 
   useEffect(() => {
     let timer: number | undefined
@@ -152,37 +213,57 @@ export function DeviceScreenPage() {
     }
   }, [])
 
+  const time = now.toLocaleTimeString("ru-RU", {
+    hour: "2-digit",
+    minute: "2-digit",
+  })
+
+  const date = now.toLocaleDateString("ru-RU", {
+    day: "numeric",
+    month: "long",
+    weekday: "long",
+  })
+
+  const screenTemplate = screenState?.template as
+    | {
+        columns?: number
+        layout?: Layout
+      }
+    | undefined
+
+  const currentLayout = screenTemplate?.layout ?? []
+  const currentColumns = screenTemplate?.columns ?? 3
+  console.log(screenTemplate?.columns)
+
   return (
     <div className="tv-screen">
       <div className={isAlarm ? "alarm alarm-on" : "alarm"}>{alarmText}</div>
-      <div className="tv-main">
-        <div ref={containerRef} className="tv-grid">
-          {mounted && (
-            <ReactGridLayout
-              layout={tvLayout}
-              width={width}
-              autoSize={false}
-              compactor={compactorMy}
-              gridConfig={{
-                cols: 4,
-                rowHeight: (width * 16) / 9 / 16,
-                margin: [0, 0],
-                containerPadding: [0, 0],
-                maxRows: 16,
-              }}
-              dragConfig={{
-                enabled: false,
-              }}
-              resizeConfig={{
-                enabled: false,
-              }}
-            >
-              {tvLayout.map((item) => (
-                <div key={item.i}>{getCard(item.i)}</div>
-              ))}
-            </ReactGridLayout>
-          )}
-        </div>
+      <div ref={containerRef} className="tv-grid">
+        {mounted && currentLayout.length > 0 && (
+          <ReactGridLayout
+            layout={currentLayout}
+            width={width}
+            autoSize={false}
+            compactor={compactorMy}
+            gridConfig={{
+              cols: currentColumns,
+              rowHeight: (width * 16) / 9 / 16,
+              margin: [0, 0],
+              containerPadding: [0, 0],
+              maxRows: 16,
+            }}
+            dragConfig={{
+              enabled: false,
+            }}
+            resizeConfig={{
+              enabled: false,
+            }}
+          >
+            {currentLayout.map((item) => (
+              <div key={item.i}>{getCard(item.i, screenState, time, date)}</div>
+            ))}
+          </ReactGridLayout>
+        )}
       </div>
     </div>
   )

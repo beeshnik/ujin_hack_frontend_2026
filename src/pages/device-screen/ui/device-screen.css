@@ -2,9 +2,9 @@
   width: min(100vw, calc(100vh * 9 / 16));
   height: min(100vh, calc(100vw * 16 / 9));
   aspect-ratio: 9 / 16;
-  background: #dbe3ef;
   display: flex;
   flex-direction: column;
+  align-items: center;
   overflow: hidden;
 }
 
@@ -31,3 +31,9 @@
   padding: 0 24px;
 }
 
+.tv-grid {
+  flex: 1;
+  min-height: 0;
+  max-width: 100%;
+  aspect-ratio: 9 / 16;
+}
