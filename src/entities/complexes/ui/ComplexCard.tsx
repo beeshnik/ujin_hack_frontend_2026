@@ -1,5 +1,6 @@
 import type { Complex } from "@/shared/api/generated/model"
 import { Building, Building2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
     complex: Complex
@@ -7,8 +8,17 @@ type Props = {
 
 export function ComplexCard({complex}: Props) {
 
+  const navigate = useNavigate()
+
+  function handleOnClick() {
+    navigate(`/complexes/${complex.id}/houses`);
+  }
+
     return (
-      <div className="flex flex-col gap-4 p-4 border rounded-[12px] justify-between hover:shadow-(--shadow-card) cursor-pointer transition-all duration-300 h-[240px]">
+      <div
+        onClick={() => handleOnClick()}
+        className="flex flex-col gap-4 p-4 border rounded-[12px] justify-between hover:shadow-(--shadow-card) cursor-pointer transition-all duration-300 h-[240px]"
+      >
         <div className="flex flex-col gap-4">
           <div className="flex flex-row">
             <div className="items-center justify-center rounded-[8px] p-2 bg-(--borders-light) w-auto">

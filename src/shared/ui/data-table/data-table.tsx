@@ -107,12 +107,12 @@ export function DataTable<T extends object>({
     <div className="space-y-3">
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-2">
-        <SearchInput
+        {/* <SearchInput
           value={search}
           onChange={(v) => { setSearch(v); setPage(0) }}
           placeholder={searchPlaceholder}
           className="w-64"
-        />
+        /> */}
         {toolbarExtra}
         {selectedIds && selectedIds.size > 0 && bulkActions && (
           <div className="ml-auto flex items-center gap-2">
