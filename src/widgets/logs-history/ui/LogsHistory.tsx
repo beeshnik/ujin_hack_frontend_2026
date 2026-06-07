@@ -48,12 +48,7 @@ export function LogsHistory({complexId, houseId, displayId}: Props) {
     return (
       <div className="mt-8">
         <FilterBuildings setFilter={setFilter} />
-        {
-          <DataTable
-            data={displayLogs?.data || []}
-            columns={columns}
-          />
-        }
+        {<DataTable data={filtredLogs || []} columns={columns} />}
       </div>
     )
 }
