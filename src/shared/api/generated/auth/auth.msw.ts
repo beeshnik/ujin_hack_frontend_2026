@@ -51,7 +51,7 @@ export const getRegisterMockHandler = (overrideResponse?: void | ((info: Paramet
   if (typeof overrideResponse === 'function') {await overrideResponse(info); }
 
     return new HttpResponse(null,
-      { status: 201
+      { status: 200
       })
   }, options)
 }
