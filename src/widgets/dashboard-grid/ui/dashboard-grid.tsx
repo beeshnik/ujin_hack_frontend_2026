@@ -9,6 +9,7 @@ import { Button } from "@/shared/ui/button"
 import { ArrowLeft, Save } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { useCreateTemplate } from "@/shared/api/generated/templates/templates"
+import { useQueryClient } from "@tanstack/react-query"
 
 type props = {
   name: string
@@ -20,10 +21,10 @@ type WidgetType =
   | "header"
   | "footer"
   | "weather"
-  | "house-news"
+  | "house_news"
   | "parking"
   | "storage"
-  | "external-news"
+  | "external_news"
   | "image"
   | "text"
   | "camera"
@@ -56,6 +57,8 @@ export function DashboardGrid({name}: props) {
   const [columns, setColumns] = useState<GridColumns>(3)
   const [layout, setLayout] = useState<Layout>(initialLayout)
 
+  const queryClient = useQueryClient() 
+
 
   const navigate = useNavigate()
 
@@ -67,7 +70,7 @@ export function DashboardGrid({name}: props) {
 
   useEffect(() => {
     if (createTemplateStatus === "success")
-      navigate(-1)
+      queryClient.invalidateQueries({ queryKey: ["/templates"] })
   }, [createTemplateStatus])
 
   function getWidgetType(id: string): WidgetType {
@@ -222,6 +225,9 @@ export function DashboardGrid({name}: props) {
         body: gridJson,
       },
     })
+    if (createTemplateStatus === "success") {
+      navigate(-1)
+    }
   }
 
 
@@ -304,9 +310,6 @@ export function DashboardGrid({name}: props) {
           </ReactGridLayout>
         )}
       </div>
-      {/* <pre className="dashboard-grid-json">
-        {JSON.stringify(gridJson, null, 2)}
-      </pre> */}
     </div>
   )
 }

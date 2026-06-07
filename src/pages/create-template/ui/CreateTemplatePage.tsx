@@ -6,7 +6,7 @@ export function CreateTemplate() {
     const { templateName } = useParams()
     return (
       <div>
-        <DashboardGrid name={templateName} />{" "}
+        <DashboardGrid name={templateName || "defaultName"} />
       </div>
     )
 }

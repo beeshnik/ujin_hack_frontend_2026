@@ -11,11 +11,13 @@ export function TemplateList() {
   const { data: templates, status, isLoading } = useGetTemplates()
 
   useEffect(() => {
-    if (status === "success" && templateList) {
-      const filtredTemplates = templateList.filter((template) =>
-        filter && filter.name ? template.name.includes(filter?.name) : true,
-      ) || []
-      setTemplateList(filtredTemplates)
+    if (status === "success" && templates) {
+        const rawTemplates = templates.data as Template[]
+      //   const filtredTemplates = templateList.filter((template) =>
+      //     (filter && filter.name) ? template.name.includes(filter?.name) : false,
+      //   ) || []
+      setTemplateList(rawTemplates)
+      console.log(templateList)
     }
   }, [templates])
   return (

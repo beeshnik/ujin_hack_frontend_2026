@@ -7,7 +7,7 @@ type Props = {
 
 export function TemplateCard({ template }: Props) {
   return (
-    <div className="rounded-[8px] border border-border flex flex-col">
+    <div className="rounded-[8px] border border-border flex flex-col p-4">
       <div></div>
       <div className="flex flex-col gap-1">
         <h2>{template.name}</h2>

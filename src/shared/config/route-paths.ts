@@ -10,6 +10,7 @@ export const ROUTES = {
   HOUSES: "/complexes/:complexId/houses",
   ACCESS_DENIED: "/access-denied",
   CREATE_TEMPLATE: "/create-template/:templateName",
+  DISPLAY_PAGE: "/complexes/:complexId/houses/:houseId/display/:displayId",
   NOT_FOUND: "*",
 } as const;
 

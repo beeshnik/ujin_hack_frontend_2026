@@ -13,6 +13,7 @@ import { Templates } from "@/pages/templates";
 import { Houses } from "@/pages/houses";
 import { RegistrationPage } from "@/pages/auth/registration";
 import { CreateTemplate } from "@/pages/create-template";
+import { DisplayInfoPage } from "@/pages/displayInfo";
 
 const LoginPage = lazy(() => import("@/pages/auth/login"));
 const DashboardPage = <Dashboard />;
@@ -92,6 +93,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.CREATE_TEMPLATE,
         element: <CreateTemplate />,
+      },
+      {
+        path: ROUTES.DISPLAY_PAGE,
+        element: <DisplayInfoPage />,
       },
     ],
   },
