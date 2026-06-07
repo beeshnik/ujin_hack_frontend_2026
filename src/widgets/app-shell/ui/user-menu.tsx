@@ -43,11 +43,11 @@ export function UserMenu() {
         <button className="flex items-center gap-2 rounded-md p-1 hover:bg-accent">
           <Avatar className="h-8 w-8">
             <AvatarFallback className="text-xs">
-              {getInitials(session.user ? session.user.name : "Неизвестно")}
+              {getInitials(session.user ? session.user.name : "Пользователь")}
             </AvatarFallback>
           </Avatar>
           <span className="hidden text-sm font-medium sm:block">
-            {session.user ? session.user.name : "Неизвестно"}
+            {session.user ? session.user.name : "Пользователь"}
           </span>
         </button>
       </DropdownMenuTrigger>
@@ -55,12 +55,12 @@ export function UserMenu() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col gap-1">
             <span className="text-sm font-medium">
-              {session.user ? session.user.name : "Неизвестно"}
+              {session.user ? session.user.name : "Пользователь"}
             </span>
             <Badge variant="secondary" className="w-fit text-xs">
               {session.user
                 ? ROLE_LABELS[session.user.role] || session.user.role
-                : "Неизвестно"}
+                : "Пользователь"}
             </Badge>
           </div>
         </DropdownMenuLabel>
@@ -75,5 +75,5 @@ export function UserMenu() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }

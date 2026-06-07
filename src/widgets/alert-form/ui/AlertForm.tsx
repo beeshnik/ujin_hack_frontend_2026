@@ -30,7 +30,7 @@ export function AlertForm() {
         text: data.text,
         until_at: timestemp,
         priority: Number(data.priority),
-        target: 0
+        target: Number(data.target),
       },
     })
     
