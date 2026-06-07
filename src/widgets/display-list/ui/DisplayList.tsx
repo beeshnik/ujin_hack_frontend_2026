@@ -17,87 +17,23 @@ type Props = {
 };
 
 export function DisplayList({ complexId, houseId }: Props) {
-  const [houses, setHouses] = useState<House[]>();
   const { data: housesList, status: houseStatus } = useGetHouses(complexId);
 
-  const [complexes, setComplexes] = useState<Complex[]>();
   const { data: complexList, status: complexStatus } = useGetComplexes();
 
   const [filter, setFilter] = useState<FilterDTO>();
 
-  const [displays, setDisplays] = useState<Display[]>();
   const { data: displayList, status: displayStatus } = useGetDisplays(
     complexId,
     houseId,
   );
 
-  useEffect(() => {
-    if (complexStatus === "success" && complexes) {
-      const rawComplexes = complexList.data as Complex[]
-
-      const filtredComplexes =
-        rawComplexes?.filter((complex) =>
-          complex.name
-            .toLowerCase()
-            .includes(
-              filter !== undefined &&
-                filter.name !== undefined &&
-                filter.name !== ""
-                ? filter.name.toLowerCase()
-                : complex.name.toLowerCase(),
-            ),
-        ) || []
-
-      setComplexes(filtredComplexes as Complex[])
-    }
-  }, [complexes, houses, displays])
-
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (houseStatus === "success" && houses) {
-      const rawHouses = housesList.data as House[];
-
-      const filtredHouses =
-        rawHouses?.filter((house) =>
-          house.name
-            .toLowerCase()
-            .includes(
-              filter !== undefined &&
-                filter.name !== undefined &&
-                filter.name !== ""
-                ? filter.name.toLowerCase()
-                : house.name.toLowerCase(),
-            ),
-        ) || [];
-      setHouses(filtredHouses);
-    }
-  }, [housesList, filter]);
-
-  useEffect(() => {
-    if (displayStatus === "success" && displayList) {
-      const rawDisplays = displayList.data as Display[];
-
-      const filtredDisplays =
-        rawDisplays?.filter((filterEntity) =>
-          filterEntity.name
-            .toLowerCase()
-            .includes(
-              filter !== undefined &&
-                filter.name !== undefined &&
-                filter.name !== ""
-                ? filter.name.toLowerCase()
-                : filterEntity.name.toLowerCase(),
-            ),
-        ) || [];
-      setDisplays(filtredDisplays);
-    }
-  }, [housesList, filter]);
 
   const settings = {
     complexes: true,
-    houses: houses,
-  } as settingsType;
+    houses: housesList?.data || [],
+  } as settingsType
 
   const columns = [
     {
@@ -120,9 +56,9 @@ export function DisplayList({ complexId, houseId }: Props) {
   return (
     <>
       <FilterBuildings setFilter={setFilter} settings={settings} />
-      {displays ? (
+      {displayList?.data ? (
         <DataTable
-          data={displays}
+          data={displayList?.data || []}
           columns={columns}
           onRowClick={(display: Display) => {
             navigate(
@@ -130,7 +66,9 @@ export function DisplayList({ complexId, houseId }: Props) {
             )
           }}
         />
-      ) : (<p>{"Дисплеев пока нет"}</p>)}
+      ) : (
+        <p>{"Дисплеев пока нет"}</p>
+      )}
     </>
-  );
+  )
 }

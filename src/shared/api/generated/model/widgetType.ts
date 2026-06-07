@@ -15,13 +15,31 @@
 
 /**
  * Тип виджета:
- * - `WEATHER` — погода
- * - `PARKING` — парковка
+ * - `HEADER` — верхний блок (одиночный)
+ * - `FOOTER` — нижний блок (одиночный)
+ * - `WEATHER` — погода (одиночный)
+ * - `HOUSE_NEWS` — новости дома (одиночный)
+ * - `PARKING` — парковки (одиночный)
+ * - `STORAGE` — кладовые (одиночный)
+ * - `EXTERNAL_NEWS` — RSS / внешние новости (одиночный)
+ * - `IMAGE` — картинка (множественный)
+ * - `TEXT` — текст (множественный)
+ * - `CAMERA` — камера (множественный)
+ * - `PROMO` — объявление / промо (множественный)
  */
 export type WidgetType = typeof WidgetType[keyof typeof WidgetType];
 
 
 export const WidgetType = {
+  HEADER: 'HEADER',
+  FOOTER: 'FOOTER',
   WEATHER: 'WEATHER',
+  HOUSE_NEWS: 'HOUSE_NEWS',
   PARKING: 'PARKING',
+  STORAGE: 'STORAGE',
+  EXTERNAL_NEWS: 'EXTERNAL_NEWS',
+  IMAGE: 'IMAGE',
+  TEXT: 'TEXT',
+  CAMERA: 'CAMERA',
+  PROMO: 'PROMO',
 } as const;

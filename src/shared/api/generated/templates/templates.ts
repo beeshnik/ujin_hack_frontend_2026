@@ -32,6 +32,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  LightTemplate,
   NotFoundResponse,
   Template,
   TemplateInput,
@@ -46,7 +47,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 export type getTemplatesResponse200 = {
-  data: Template[]
+  data: LightTemplate[]
   status: 200
 }
 
